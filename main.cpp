@@ -1,7 +1,17 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <string>
+#include "Grid.hpp"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Test");
+    int winSizeX = 500;
+    int winSizeY = 500;
+
+    Grid* grid = new Grid(winSizeX, winSizeY, 25);
+
+    
+
+    sf::RenderWindow window(sf::VideoMode(winSizeX, winSizeY), "SFML Test");
 
     while (window.isOpen()) {
         sf::Event event;
@@ -10,7 +20,13 @@ int main() {
                 window.close();
         }
 
-        window.clear(sf::Color::Blue);
+        window.clear(sf::Color::Cyan);
+
+        // Draw Grids Squares
+        for (int i = 0; i < grid->getNumGridCells(); i++){
+            window.draw(grid->getGridCell(i).getCellBlock());
+        }
+
         window.display();
     }
 

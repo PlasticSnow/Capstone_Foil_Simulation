@@ -7,7 +7,7 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "/Users/nathanielnielsen/Desktop/Capstone/CMakeLists.txt"
+  "/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/CMakeLists.txt"
   "CMakeFiles/4.0.2/CMakeCXXCompiler.cmake"
   "CMakeFiles/4.0.2/CMakeSystem.cmake"
   "/opt/homebrew/opt/sfml@2/lib/cmake/SFML/SFMLConfig.cmake"
