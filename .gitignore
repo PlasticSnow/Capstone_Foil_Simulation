@@ -39,3 +39,12 @@
 
 # debug information files
 *.dwo
+
+# VS Code settings and caches
+.vscode/
+
+# Visual Studio files
+.vs/
+
+# CMake build folders
+build/
