@@ -57,10 +57,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/nathanielnielsen/Desktop/Capstone
+CMAKE_SOURCE_DIR = /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/nathanielnielsen/Desktop/Capstone/build
+CMAKE_BINARY_DIR = /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/nathanielnielsen/Desktop/Capstone/build/CMakeFiles /Users/nathanielnielsen/Desktop/Capstone/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/nathanielnielsen/Desktop/Capstone/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -129,6 +129,54 @@ FoilSimulation/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/build
 .PHONY : FoilSimulation/fast
 
+Cell.o: Cell.cpp.o
+.PHONY : Cell.o
+
+# target to build an object file
+Cell.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Cell.cpp.o
+.PHONY : Cell.cpp.o
+
+Cell.i: Cell.cpp.i
+.PHONY : Cell.i
+
+# target to preprocess a source file
+Cell.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Cell.cpp.i
+.PHONY : Cell.cpp.i
+
+Cell.s: Cell.cpp.s
+.PHONY : Cell.s
+
+# target to generate assembly for a file
+Cell.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Cell.cpp.s
+.PHONY : Cell.cpp.s
+
+Grid.o: Grid.cpp.o
+.PHONY : Grid.o
+
+# target to build an object file
+Grid.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Grid.cpp.o
+.PHONY : Grid.cpp.o
+
+Grid.i: Grid.cpp.i
+.PHONY : Grid.i
+
+# target to preprocess a source file
+Grid.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Grid.cpp.i
+.PHONY : Grid.cpp.i
+
+Grid.s: Grid.cpp.s
+.PHONY : Grid.s
+
+# target to generate assembly for a file
+Grid.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Grid.cpp.s
+.PHONY : Grid.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -162,6 +210,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... FoilSimulation"
+	@echo "... Cell.o"
+	@echo "... Cell.i"
+	@echo "... Cell.s"
+	@echo "... Grid.o"
+	@echo "... Grid.i"
+	@echo "... Grid.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

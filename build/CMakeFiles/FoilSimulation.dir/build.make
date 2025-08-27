@@ -53,10 +53,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/nathanielnielsen/Desktop/Capstone
+CMAKE_SOURCE_DIR = /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/nathanielnielsen/Desktop/Capstone/build
+CMAKE_BINARY_DIR = /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/FoilSimulation.dir/depend.make
@@ -73,33 +73,65 @@ CMakeFiles/FoilSimulation.dir/codegen:
 .PHONY : CMakeFiles/FoilSimulation.dir/codegen
 
 CMakeFiles/FoilSimulation.dir/main.cpp.o: CMakeFiles/FoilSimulation.dir/flags.make
-CMakeFiles/FoilSimulation.dir/main.cpp.o: /Users/nathanielnielsen/Desktop/Capstone/main.cpp
+CMakeFiles/FoilSimulation.dir/main.cpp.o: /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/main.cpp
 CMakeFiles/FoilSimulation.dir/main.cpp.o: CMakeFiles/FoilSimulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/FoilSimulation.dir/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FoilSimulation.dir/main.cpp.o -MF CMakeFiles/FoilSimulation.dir/main.cpp.o.d -o CMakeFiles/FoilSimulation.dir/main.cpp.o -c /Users/nathanielnielsen/Desktop/Capstone/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/FoilSimulation.dir/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FoilSimulation.dir/main.cpp.o -MF CMakeFiles/FoilSimulation.dir/main.cpp.o.d -o CMakeFiles/FoilSimulation.dir/main.cpp.o -c /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/main.cpp
 
 CMakeFiles/FoilSimulation.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FoilSimulation.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/nathanielnielsen/Desktop/Capstone/main.cpp > CMakeFiles/FoilSimulation.dir/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/main.cpp > CMakeFiles/FoilSimulation.dir/main.cpp.i
 
 CMakeFiles/FoilSimulation.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FoilSimulation.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/nathanielnielsen/Desktop/Capstone/main.cpp -o CMakeFiles/FoilSimulation.dir/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/main.cpp -o CMakeFiles/FoilSimulation.dir/main.cpp.s
+
+CMakeFiles/FoilSimulation.dir/Grid.cpp.o: CMakeFiles/FoilSimulation.dir/flags.make
+CMakeFiles/FoilSimulation.dir/Grid.cpp.o: /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/Grid.cpp
+CMakeFiles/FoilSimulation.dir/Grid.cpp.o: CMakeFiles/FoilSimulation.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/FoilSimulation.dir/Grid.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FoilSimulation.dir/Grid.cpp.o -MF CMakeFiles/FoilSimulation.dir/Grid.cpp.o.d -o CMakeFiles/FoilSimulation.dir/Grid.cpp.o -c /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/Grid.cpp
+
+CMakeFiles/FoilSimulation.dir/Grid.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FoilSimulation.dir/Grid.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/Grid.cpp > CMakeFiles/FoilSimulation.dir/Grid.cpp.i
+
+CMakeFiles/FoilSimulation.dir/Grid.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FoilSimulation.dir/Grid.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/Grid.cpp -o CMakeFiles/FoilSimulation.dir/Grid.cpp.s
+
+CMakeFiles/FoilSimulation.dir/Cell.cpp.o: CMakeFiles/FoilSimulation.dir/flags.make
+CMakeFiles/FoilSimulation.dir/Cell.cpp.o: /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/Cell.cpp
+CMakeFiles/FoilSimulation.dir/Cell.cpp.o: CMakeFiles/FoilSimulation.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/FoilSimulation.dir/Cell.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FoilSimulation.dir/Cell.cpp.o -MF CMakeFiles/FoilSimulation.dir/Cell.cpp.o.d -o CMakeFiles/FoilSimulation.dir/Cell.cpp.o -c /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/Cell.cpp
+
+CMakeFiles/FoilSimulation.dir/Cell.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FoilSimulation.dir/Cell.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/Cell.cpp > CMakeFiles/FoilSimulation.dir/Cell.cpp.i
+
+CMakeFiles/FoilSimulation.dir/Cell.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FoilSimulation.dir/Cell.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/Cell.cpp -o CMakeFiles/FoilSimulation.dir/Cell.cpp.s
 
 # Object files for target FoilSimulation
 FoilSimulation_OBJECTS = \
-"CMakeFiles/FoilSimulation.dir/main.cpp.o"
+"CMakeFiles/FoilSimulation.dir/main.cpp.o" \
+"CMakeFiles/FoilSimulation.dir/Grid.cpp.o" \
+"CMakeFiles/FoilSimulation.dir/Cell.cpp.o"
 
 # External object files for target FoilSimulation
 FoilSimulation_EXTERNAL_OBJECTS =
 
 FoilSimulation: CMakeFiles/FoilSimulation.dir/main.cpp.o
+FoilSimulation: CMakeFiles/FoilSimulation.dir/Grid.cpp.o
+FoilSimulation: CMakeFiles/FoilSimulation.dir/Cell.cpp.o
 FoilSimulation: CMakeFiles/FoilSimulation.dir/build.make
 FoilSimulation: /opt/homebrew/opt/sfml@2/lib/libsfml-graphics.2.6.2.dylib
 FoilSimulation: /opt/homebrew/opt/sfml@2/lib/libsfml-window.2.6.2.dylib
 FoilSimulation: /opt/homebrew/opt/sfml@2/lib/libsfml-system.2.6.2.dylib
 FoilSimulation: CMakeFiles/FoilSimulation.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable FoilSimulation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable FoilSimulation"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/FoilSimulation.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -111,6 +143,6 @@ CMakeFiles/FoilSimulation.dir/clean:
 .PHONY : CMakeFiles/FoilSimulation.dir/clean
 
 CMakeFiles/FoilSimulation.dir/depend:
-	cd /Users/nathanielnielsen/Desktop/Capstone/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/nathanielnielsen/Desktop/Capstone /Users/nathanielnielsen/Desktop/Capstone /Users/nathanielnielsen/Desktop/Capstone/build /Users/nathanielnielsen/Desktop/Capstone/build /Users/nathanielnielsen/Desktop/Capstone/build/CMakeFiles/FoilSimulation.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles/FoilSimulation.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/FoilSimulation.dir/depend
 
