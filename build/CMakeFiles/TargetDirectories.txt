@@ -1,0 +1,3 @@
+/Users/nathanielnielsen/Desktop/Capstone/build/CMakeFiles/FoilSimulation.dir
+/Users/nathanielnielsen/Desktop/Capstone/build/CMakeFiles/edit_cache.dir
+/Users/nathanielnielsen/Desktop/Capstone/build/CMakeFiles/rebuild_cache.dir

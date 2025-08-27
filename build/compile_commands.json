@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/nathanielnielsen/Desktop/Capstone/build",
+  "command": "/usr/bin/c++  -isystem /opt/homebrew/opt/sfml@2/include -std=gnu++17 -arch arm64 -o CMakeFiles/FoilSimulation.dir/main.cpp.o -c /Users/nathanielnielsen/Desktop/Capstone/main.cpp",
+  "file": "/Users/nathanielnielsen/Desktop/Capstone/main.cpp",
+  "output": "CMakeFiles/FoilSimulation.dir/main.cpp.o"
+}
+]
