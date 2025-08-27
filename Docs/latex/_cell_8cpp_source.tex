@@ -1,0 +1,17 @@
+\doxysection{Cell.\+cpp}
+\hypertarget{_cell_8cpp_source}{}\label{_cell_8cpp_source}\index{src/Cell.cpp@{src/Cell.cpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}Cell.hpp"{}}}
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00004}00004\ Cell::Cell(\textcolor{keywordtype}{int}\ cID,\ \textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ col,\ \textcolor{keywordtype}{int}\ cellSize)}
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00005}00005\ \{}
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00006}00006\ \ \ \ \ this-\/>cellID\ =\ cID;}
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00007}00007\ \ \ \ \ this-\/>cellBlock.setSize(sf::Vector2f(cellSize,\ cellSize));}
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00008}00008\ \ \ \ \ this-\/>cellBlock.setOutlineColor(sf::Color::Black);}
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00009}00009\ \ \ \ \ this-\/>cellBlock.setOutlineThickness(2.0f);}
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00010}00010\ \ \ \ \ this-\/>cellBlock.setPosition(row\ *\ cellSize,\ col\ *\ cellSize);}
+\DoxyCodeLine{\Hypertarget{_cell_8cpp_source_l00011}00011\ \}}
+
+\end{DoxyCode}

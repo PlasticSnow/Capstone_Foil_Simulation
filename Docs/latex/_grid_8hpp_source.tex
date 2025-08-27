@@ -1,0 +1,30 @@
+\doxysection{Grid.\+hpp}
+\hypertarget{_grid_8hpp_source}{}\label{_grid_8hpp_source}\index{src/Grid.hpp@{src/Grid.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}Cell.hpp"{}}}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00004}00004\ \textcolor{preprocessor}{\#pragma\ include}}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00006}\mbox{\hyperlink{class_grid}{00006}}\ \textcolor{keyword}{class\ }Grid\{}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00008}00008\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00010}00010\ \ \ \ \ \ \ \ \ Grid(\textcolor{keywordtype}{int}\ length,\ \textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ cellSize);}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00012}00012\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_cell}{Cell}}\ getGridCell(\textcolor{keywordtype}{int}\ cellIndex)\{\textcolor{keywordflow}{return}\ gridCells[cellIndex];\}}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00014}00014\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ getNumGridCells()\{\textcolor{keywordflow}{return}\ numCells;\}}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00016}00016\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00017}00017\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ length;}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00018}00018\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ width;}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00019}00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ numCells;}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00020}00020\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ numRows;}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00021}00021\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ numColumns;}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00022}00022\ \ \ \ \ \ \ \ \ std::vector<Cell>\ gridCells;;}
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{_grid_8hpp_source_l00024}00024\ \};}
+
+\end{DoxyCode}

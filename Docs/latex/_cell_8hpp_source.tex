@@ -1,0 +1,58 @@
+\doxysection{Cell.\+hpp}
+\hypertarget{_cell_8hpp_source}{}\label{_cell_8hpp_source}\index{src/Cell.hpp@{src/Cell.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00003}00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00005}\mbox{\hyperlink{class_cell}{00005}}\ \textcolor{keyword}{class\ }Cell\{}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00007}00007\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00009}00009\ \ \ \ \ \ \ \ \ Cell(\textcolor{keywordtype}{int}\ cID,\ \textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ col,\ \textcolor{keywordtype}{int}\ cellSize);}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00011}00011\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ getCellID()\{\textcolor{keywordflow}{return}\ cellID;\}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00012}00012\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00013}00013\ \ \ \ \ \ \ \ \ sf::RectangleShape\ getCellBlock()\{\textcolor{keywordflow}{return}\ cellBlock;\}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00016}00016\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Cell\ Edge\ Velocity\ Getters\ */}\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00017}00017\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ getLeftVel()\{\textcolor{keywordflow}{return}\ leftVelocity;\}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00018}00018\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00019}00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ getRightVel()\{\textcolor{keywordflow}{return}\ rightVelocity;\}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00020}00020\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00021}00021\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ getTopVel()\{\textcolor{keywordflow}{return}\ topVelocity;\}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00022}00022\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00023}00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ getBottomVel()\{\textcolor{keywordflow}{return}\ bottomVelocity;\}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00025}00025\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Cell\ Edge\ Velocity\ Setters\ */}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00026}00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setLeftVel(\textcolor{keywordtype}{float}\ velocity)\{leftVelocity\ =\ velocity;\}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00028}00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setRightVel(\textcolor{keywordtype}{float}\ velocity)\{rightVelocity\ =\ velocity;\}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00030}00030\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setTopVel(\textcolor{keywordtype}{float}\ velocity)\{topVelocity\ =\ velocity;\}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00032}00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setBottomVel(\textcolor{keywordtype}{float}\ velocity)\{bottomVelocity\ =\ velocity;\}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00035}00035\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00037}00037\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Velocity\ of\ Cell's\ Left\ Edge}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00038}00038\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ leftVelocity\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00040}00040\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Velocity\ of\ Cell's\ Right\ Edge}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00041}00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ rightVelocity\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Velocity\ of\ Cell's\ Top\ Edge}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ topVelocity\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Velocity\ of\ Cell's\ Bottom\ Edge}}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ bottomVelocity\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00049}00049\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ cellID;}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00051}00051\ \ \ \ \ \ \ \ \ sf::RectangleShape\ cellBlock;}
+\DoxyCodeLine{\Hypertarget{_cell_8hpp_source_l00052}00052\ \};}
+
+\end{DoxyCode}

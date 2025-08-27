@@ -129,77 +129,77 @@ FoilSimulation/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/build
 .PHONY : FoilSimulation/fast
 
-Cell.o: Cell.cpp.o
-.PHONY : Cell.o
+src/Cell.o: src/Cell.cpp.o
+.PHONY : src/Cell.o
 
 # target to build an object file
-Cell.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Cell.cpp.o
-.PHONY : Cell.cpp.o
+src/Cell.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o
+.PHONY : src/Cell.cpp.o
 
-Cell.i: Cell.cpp.i
-.PHONY : Cell.i
+src/Cell.i: src/Cell.cpp.i
+.PHONY : src/Cell.i
 
 # target to preprocess a source file
-Cell.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Cell.cpp.i
-.PHONY : Cell.cpp.i
+src/Cell.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Cell.cpp.i
+.PHONY : src/Cell.cpp.i
 
-Cell.s: Cell.cpp.s
-.PHONY : Cell.s
+src/Cell.s: src/Cell.cpp.s
+.PHONY : src/Cell.s
 
 # target to generate assembly for a file
-Cell.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Cell.cpp.s
-.PHONY : Cell.cpp.s
+src/Cell.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Cell.cpp.s
+.PHONY : src/Cell.cpp.s
 
-Grid.o: Grid.cpp.o
-.PHONY : Grid.o
+src/Grid.o: src/Grid.cpp.o
+.PHONY : src/Grid.o
 
 # target to build an object file
-Grid.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Grid.cpp.o
-.PHONY : Grid.cpp.o
+src/Grid.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o
+.PHONY : src/Grid.cpp.o
 
-Grid.i: Grid.cpp.i
-.PHONY : Grid.i
+src/Grid.i: src/Grid.cpp.i
+.PHONY : src/Grid.i
 
 # target to preprocess a source file
-Grid.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Grid.cpp.i
-.PHONY : Grid.cpp.i
+src/Grid.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Grid.cpp.i
+.PHONY : src/Grid.cpp.i
 
-Grid.s: Grid.cpp.s
-.PHONY : Grid.s
+src/Grid.s: src/Grid.cpp.s
+.PHONY : src/Grid.s
 
 # target to generate assembly for a file
-Grid.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/Grid.cpp.s
-.PHONY : Grid.cpp.s
+src/Grid.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Grid.cpp.s
+.PHONY : src/Grid.cpp.s
 
-main.o: main.cpp.o
-.PHONY : main.o
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/main.cpp.o
-.PHONY : main.cpp.o
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
 
-main.i: main.cpp.i
-.PHONY : main.i
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 # Help Target
 help:
@@ -210,15 +210,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... FoilSimulation"
-	@echo "... Cell.o"
-	@echo "... Cell.i"
-	@echo "... Cell.s"
-	@echo "... Grid.o"
-	@echo "... Grid.i"
-	@echo "... Grid.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... src/Cell.o"
+	@echo "... src/Cell.i"
+	@echo "... src/Cell.s"
+	@echo "... src/Grid.o"
+	@echo "... src/Grid.i"
+	@echo "... src/Grid.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 .PHONY : help
 
 
