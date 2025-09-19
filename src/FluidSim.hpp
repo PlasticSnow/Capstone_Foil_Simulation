@@ -23,34 +23,63 @@ class FluidSim{
 
     FluidSim(int Nx_, int Ny_, double dx_);
 
+
     static double clamp(double x, double a, double b);
+
+
 
     double sampleScalar(const std::vector<double>& s, double x, double y) const;
 
+
     double sampleU(const std::vector<double>& uf, double x, double y) const;
+
 
     double sampleV(const std::vector<double>& vf, double x, double y) const;
 
+
     void sampleVelocity(double x, double y, double& ux, double& vy) const;
+
 
     void applyBoundary();
 
+
     void computeDivergence();
+
 
     void solvePressure();
 
+
     void projectVelocity();
+
 
     void advectVelocity();
 
+
     void advectDye();
+
 
     void addForces();
 
+
     void addInflow();
+
 
     void adaptDt();
 
+    /** 
+     * @brief Contains all the functions needed in order to update the simulation
+     * @details This function contains all the functions needed in order
+     *          to update the simulation, it would be called for each time step.
+     *          Functions in order as follows:
+     *              addInflow();
+     *              adaptDt();
+     *              advectVelocity();
+     *              addForces();
+     *              computeDivergence();
+     *              solvePressure();
+     *              projectVelocity();
+     *              advectDye();
+     */
     void step();
 
 };
