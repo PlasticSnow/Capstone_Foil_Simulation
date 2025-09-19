@@ -7,11 +7,6 @@
 //  - Projection step to enforce incompressibility
 //  - Simple inflow + dye injection
 //  - Interactive SFML window visualization
-//
-// Compile (assuming SFML installed via system package manager):
-//   g++ -O2 -std=c++17 fluid2d_sfml.cpp -o fluid2d -lsfml-graphics -lsfml-window -lsfml-system
-// Run:
-//   ./fluid2d
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
