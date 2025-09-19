@@ -72,38 +72,24 @@ include CMakeFiles/FoilSimulation.dir/flags.make
 CMakeFiles/FoilSimulation.dir/codegen:
 .PHONY : CMakeFiles/FoilSimulation.dir/codegen
 
-CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o: CMakeFiles/FoilSimulation.dir/flags.make
-CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o: /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/Cell.cpp
-CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o: CMakeFiles/FoilSimulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o -MF CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o.d -o CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o -c /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/Cell.cpp
+CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.o: CMakeFiles/FoilSimulation.dir/flags.make
+CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.o: /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/FluidSim.cpp
+CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.o: CMakeFiles/FoilSimulation.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.o -MF CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.o.d -o CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.o -c /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/FluidSim.cpp
 
-CMakeFiles/FoilSimulation.dir/src/Cell.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FoilSimulation.dir/src/Cell.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/Cell.cpp > CMakeFiles/FoilSimulation.dir/src/Cell.cpp.i
+CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/FluidSim.cpp > CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.i
 
-CMakeFiles/FoilSimulation.dir/src/Cell.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FoilSimulation.dir/src/Cell.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/Cell.cpp -o CMakeFiles/FoilSimulation.dir/src/Cell.cpp.s
-
-CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o: CMakeFiles/FoilSimulation.dir/flags.make
-CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o: /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/Grid.cpp
-CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o: CMakeFiles/FoilSimulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o -MF CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o.d -o CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o -c /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/Grid.cpp
-
-CMakeFiles/FoilSimulation.dir/src/Grid.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FoilSimulation.dir/src/Grid.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/Grid.cpp > CMakeFiles/FoilSimulation.dir/src/Grid.cpp.i
-
-CMakeFiles/FoilSimulation.dir/src/Grid.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FoilSimulation.dir/src/Grid.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/Grid.cpp -o CMakeFiles/FoilSimulation.dir/src/Grid.cpp.s
+CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/FluidSim.cpp -o CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.s
 
 CMakeFiles/FoilSimulation.dir/src/main.cpp.o: CMakeFiles/FoilSimulation.dir/flags.make
 CMakeFiles/FoilSimulation.dir/src/main.cpp.o: /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/main.cpp
 CMakeFiles/FoilSimulation.dir/src/main.cpp.o: CMakeFiles/FoilSimulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/FoilSimulation.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/FoilSimulation.dir/src/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FoilSimulation.dir/src/main.cpp.o -MF CMakeFiles/FoilSimulation.dir/src/main.cpp.o.d -o CMakeFiles/FoilSimulation.dir/src/main.cpp.o -c /Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/src/main.cpp
 
 CMakeFiles/FoilSimulation.dir/src/main.cpp.i: cmake_force
@@ -116,22 +102,20 @@ CMakeFiles/FoilSimulation.dir/src/main.cpp.s: cmake_force
 
 # Object files for target FoilSimulation
 FoilSimulation_OBJECTS = \
-"CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o" \
-"CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o" \
+"CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.o" \
 "CMakeFiles/FoilSimulation.dir/src/main.cpp.o"
 
 # External object files for target FoilSimulation
 FoilSimulation_EXTERNAL_OBJECTS =
 
-FoilSimulation: CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o
-FoilSimulation: CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o
+FoilSimulation: CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.o
 FoilSimulation: CMakeFiles/FoilSimulation.dir/src/main.cpp.o
 FoilSimulation: CMakeFiles/FoilSimulation.dir/build.make
 FoilSimulation: /opt/homebrew/opt/sfml@2/lib/libsfml-graphics.2.6.2.dylib
 FoilSimulation: /opt/homebrew/opt/sfml@2/lib/libsfml-window.2.6.2.dylib
 FoilSimulation: /opt/homebrew/opt/sfml@2/lib/libsfml-system.2.6.2.dylib
 FoilSimulation: CMakeFiles/FoilSimulation.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable FoilSimulation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/nathanielnielsen/Desktop/Capstone/Capstone_Foil_Simulation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable FoilSimulation"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/FoilSimulation.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

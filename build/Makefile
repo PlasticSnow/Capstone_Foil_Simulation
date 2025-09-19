@@ -129,53 +129,29 @@ FoilSimulation/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/build
 .PHONY : FoilSimulation/fast
 
-src/Cell.o: src/Cell.cpp.o
-.PHONY : src/Cell.o
+src/FluidSim.o: src/FluidSim.cpp.o
+.PHONY : src/FluidSim.o
 
 # target to build an object file
-src/Cell.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Cell.cpp.o
-.PHONY : src/Cell.cpp.o
+src/FluidSim.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.o
+.PHONY : src/FluidSim.cpp.o
 
-src/Cell.i: src/Cell.cpp.i
-.PHONY : src/Cell.i
-
-# target to preprocess a source file
-src/Cell.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Cell.cpp.i
-.PHONY : src/Cell.cpp.i
-
-src/Cell.s: src/Cell.cpp.s
-.PHONY : src/Cell.s
-
-# target to generate assembly for a file
-src/Cell.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Cell.cpp.s
-.PHONY : src/Cell.cpp.s
-
-src/Grid.o: src/Grid.cpp.o
-.PHONY : src/Grid.o
-
-# target to build an object file
-src/Grid.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Grid.cpp.o
-.PHONY : src/Grid.cpp.o
-
-src/Grid.i: src/Grid.cpp.i
-.PHONY : src/Grid.i
+src/FluidSim.i: src/FluidSim.cpp.i
+.PHONY : src/FluidSim.i
 
 # target to preprocess a source file
-src/Grid.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Grid.cpp.i
-.PHONY : src/Grid.cpp.i
+src/FluidSim.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.i
+.PHONY : src/FluidSim.cpp.i
 
-src/Grid.s: src/Grid.cpp.s
-.PHONY : src/Grid.s
+src/FluidSim.s: src/FluidSim.cpp.s
+.PHONY : src/FluidSim.s
 
 # target to generate assembly for a file
-src/Grid.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/Grid.cpp.s
-.PHONY : src/Grid.cpp.s
+src/FluidSim.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FoilSimulation.dir/build.make CMakeFiles/FoilSimulation.dir/src/FluidSim.cpp.s
+.PHONY : src/FluidSim.cpp.s
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
@@ -210,12 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... FoilSimulation"
-	@echo "... src/Cell.o"
-	@echo "... src/Cell.i"
-	@echo "... src/Cell.s"
-	@echo "... src/Grid.o"
-	@echo "... src/Grid.i"
-	@echo "... src/Grid.s"
+	@echo "... src/FluidSim.o"
+	@echo "... src/FluidSim.i"
+	@echo "... src/FluidSim.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
