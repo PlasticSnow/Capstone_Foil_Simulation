@@ -109,6 +109,7 @@ class FluidSim{
 
     void setWallFaces(int i, int j);
 
-    bool inBounds(int i, int j) const {return }
+    // TODO
+    //bool inBounds(int i, int j) const {return }
 
 };
