@@ -18,11 +18,13 @@
 #include "FluidSim.hpp"
 
 int main() {
-    int Nx = 128, Ny = 128;
+    int Nx = 50, Ny = 50;
     double dx = 1.0 / Nx;
     FluidSim sim(Nx, Ny, dx);
+    sim.setGravity(0);
+    sim.setSolid(Nx/2, Ny/2, true);
 
-    int scale = 4; // pixel size per cell
+    int scale = 5; // pixel size per cell
     sf::RenderWindow window(sf::VideoMode(Nx*scale, Ny*scale), "2D Fluid Simulation (Projection)");
     window.setFramerateLimit(60);
 

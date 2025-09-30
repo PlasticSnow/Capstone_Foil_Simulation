@@ -14,6 +14,13 @@ class FluidSim{
     double dt;          // current dt
     int poisson_iters;  // iterations for pressure solve
 
+    // Is Cell Solid
+    std::vector<bool> isSolid;
+
+
+    // Staggered grid velocity components (MAC grid)
+    // u = horizontal velocity (size: (Nx+1) * Ny)
+    // v = vertical velocity (size: Nx * (Ny+1))
     std::vector<double> u, v, u_tmp, v_tmp;
     std::vector<double> p, div, dye, dye_tmp;
 
@@ -22,6 +29,9 @@ class FluidSim{
     inline int idxV(int i, int j) const { return i + Nx*j; }
 
     FluidSim(int Nx_, int Ny_, double dx_);
+
+
+    void setGravity(double grav){this->gravity = grav;}
 
 
     static double clamp(double x, double a, double b);
@@ -37,33 +47,43 @@ class FluidSim{
     double sampleV(const std::vector<double>& vf, double x, double y) const;
 
 
+    // Helper: sample full velocity vector at (x,y)
     void sampleVelocity(double x, double y, double& ux, double& vy) const;
 
 
+    // Enforce no-slip boundary conditions (walls) ---------------------
     void applyBoundary();
 
 
+    // Compute divergence of velocity field (for incompressibility) ------------    
     void computeDivergence();
 
 
+    // Solve pressure Poisson equation ∇²p = (ρ/Δt) ∇·u ---------------
     void solvePressure();
 
 
+    // Subtract pressure gradient from velocity field (projection) -----
     void projectVelocity();
 
 
+    // Semi-Lagrangian advection of velocity fields ---------------------------
     void advectVelocity();
 
 
+    // Semi-Lagrangian advection of dye scalar --------------------------------
     void advectDye();
 
 
+    // Add external forces (gravity on v) --------------------------------------
     void addForces();
 
 
+    // Constant inflow of dye + velocity at left boundary ----------------------
     void addInflow();
 
 
+    // Adapt time step based on max velocity (CFL condition) -------------------
     void adaptDt();
 
     /** 
@@ -81,5 +101,14 @@ class FluidSim{
      *              advectDye();
      */
     void step();
+
+
+    void setSolid(int i, int j, bool state){this->isSolid[i + (Nx * j)] = state;}
+
+    bool getSolid(int i, int j) const {return isSolid[i + (Nx * j)];}
+
+    void setWallFaces(int i, int j);
+
+    bool inBounds(int i, int j) const {return }
 
 };
