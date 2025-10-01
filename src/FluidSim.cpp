@@ -9,7 +9,7 @@ FluidSim::FluidSim(int Nx_, int Ny_, double dx_){
         gravity = -9.8;
         cfl = 0.5;
         dt = 0.01;
-        poisson_iters = 200;
+        poisson_iters = 25;
         u = std::vector<double>((Nx+1)*Ny, 0.0);
         v = std::vector<double>(Nx*(Ny+1), 0.0);
         u_tmp = std::vector<double>((Nx+1)*Ny, 0.0);
@@ -254,12 +254,12 @@ void FluidSim::addForces() {
 }
 
 void FluidSim::addInflow() {
-        int i_max = std::min(3, Nx-1);
+        int i_max = std::min(1, Nx/2);
         for (int j = Ny/3; j < 2*Ny/3; ++j) {
                 for (int i = 0; i < i_max; ++i) {
                 dye[idxP(i,j)] = 1.0;
                 }
-                if (Nx >= 2) {
+                if (Nx >= 1) {
                 u[idxU(1, j)] = 9.0;
                 }
         }

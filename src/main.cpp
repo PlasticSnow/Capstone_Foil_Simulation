@@ -38,7 +38,7 @@ void setMultState(FluidSim &_sim, std::vector<Point>_points);
 
 
 int main() {
-    int Nx = 75, Ny = 75;
+    int Nx = 100, Ny = 100;
     double dx = 1.0 / Nx;
 
     std::vector<Point> rectangleOne = createRectangle((Nx/2) - 5, (Ny/2) - 5,  5 , 5);
@@ -84,7 +84,7 @@ int main() {
             for (int i = 0; i < Nx; ++i) {
                 double s = sim.dye[sim.idxP(i,j)];
                 if (s == 0){
-                    img.setPixel(i, Ny-1-j, sf::Color::Red);
+                    img.setPixel(i, Ny-1-j, sf::Color(0, 143, 17));
                 } else {
                     unsigned char c = (unsigned char)std::round(sim.clamp(s,0.0,1.0) * 255.0);
                     img.setPixel(i, Ny-1-j, sf::Color(c,c,c));
