@@ -15,7 +15,7 @@ class FluidSim{
     int poisson_iters;  // iterations for pressure solve
 
     // Is Cell Solid
-    std::vector<bool> isSolid;
+    std::vector<bool> cellState;
 
 
     // Staggered grid velocity components (MAC grid)
@@ -103,13 +103,14 @@ class FluidSim{
     void step();
 
 
-    void setSolid(int i, int j, bool state){this->isSolid[i + (Nx * j)] = state;}
+    void setCellState(int i, int j, bool state){this->cellState[i + (Nx * j)] = state;}
 
-    bool getSolid(int i, int j) const {return isSolid[i + (Nx * j)];}
+    bool isFluid(int i, int j);
 
     void setWallFaces(int i, int j);
 
-    // TODO
-    //bool inBounds(int i, int j) const {return }
+    bool inBounds(int i, int j);
+
+    void enforceWallFaces();
 
 };

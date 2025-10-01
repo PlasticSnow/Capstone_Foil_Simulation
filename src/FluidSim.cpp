@@ -18,7 +18,7 @@ FluidSim::FluidSim(int Nx_, int Ny_, double dx_){
         div = std::vector<double>(Nx*Ny, 0.0);
         dye = std::vector<double>(Nx*Ny, 0.0); 
         dye_tmp = std::vector<double>(Nx*Ny, 0.0);
-        isSolid = std::vector<bool>(Nx*Ny, false);
+        cellState = std::vector<bool>(Nx*Ny, true);
 }
 
 double FluidSim::clamp(double x, double a, double b) {
@@ -124,40 +124,35 @@ void FluidSim::solvePressure() {
             for (int j = 0; j < Ny; ++j) {
                 for (int i = 0; i < Nx; ++i) {
 
-                        if(getSolid(i,j)){
-                                continue;
-                        } else {
-                                double count = 4;
+                        if(isFluid(i,j)){
+
+                                int count = 0;
                                 double sum = 0.0;
 
 
                                 // Check if Left neighbor is Fluid 
-                                if (getSolid(i-1, j)){
-                                        count--;
-                                } else {
-                                        sum += (i > 0   ) ? p[idxP(i-1,j)] : p[idxP(i,j)];
+                                if (isFluid(i-1, j)){
+                                        count++;
+                                        sum += p[idxP(i-1,j)];
                                 }
 
                                 // Check if Right neighbor is Fluid
-                                if (getSolid(i+1,j)){
-                                        count--;
-                                } else {
-                                        sum += (i < Nx-1) ? p[idxP(i+1,j)] : p[idxP(i,j)];
+                                if (isFluid(i+1,j)){
+                                        count++;
+                                        sum += p[idxP(i+1,j)];
                                 }
 
                                 // Check if Bottom neighbor is Fluid
-                                if (getSolid(i,j-1)){
-                                        count--;
-                                } else {
-                                        sum += (j > 0   ) ? p[idxP(i,j-1)] : p[idxP(i,j)];
+                                if (isFluid(i,j-1)){
+                                        count++;
+                                        sum += p[idxP(i,j-1)];
                                 }
 
 
                                 // Check if Top neighbor is Fluid
-                                if (getSolid(i,j+1)){
-                                        count--;
-                                } else {
-                                        sum += (j < Ny-1) ? p[idxP(i,j+1)] : p[idxP(i,j)];
+                                if (isFluid(i,j+1)){
+                                        count++;
+                                        sum += p[idxP(i,j+1)];
                                 }
 
                                 // Pressure Calculation if Count is Not 0 meaning it's not a wall or surrounded by walls
@@ -165,7 +160,10 @@ void FluidSim::solvePressure() {
                                         double rhs = scale * div[idxP(i,j)];
                                         p[idxP(i,j)] = (sum - rhs * dx*dx) / count;
                                 }
+
                                 
+                        } else {
+                                continue;
                         }
                     
                 }
@@ -178,16 +176,19 @@ void FluidSim::projectVelocity() {
         const double grad_scale = dt / (rho * dx);
         for (int j = 0; j < Ny; ++j) {
             for (int i = 1; i < Nx; ++i) {
-                setWallFaces(i,j);
-                double g = p[idxP(i,j)] - p[idxP(i-1,j)];
-                u[idxU(i,j)] -= grad_scale * g;
+                if (isFluid(i-1, j) && isFluid(i,j)){
+                        double g = p[idxP(i,j)] - p[idxP(i-1,j)];
+                        u[idxU(i,j)] -= grad_scale * g;
+                }
             }
         }
         for (int j = 1; j < Ny; ++j) {
             for (int i = 0; i < Nx; ++i) {
-                setWallFaces(i,j);
-                double g = p[idxP(i,j)] - p[idxP(i,j-1)];
-                v[idxV(i,j)] -= grad_scale * g;
+
+                if (isFluid(i, j-1) && isFluid(i,j)){
+                        double g = p[idxP(i,j)] - p[idxP(i,j-1)];
+                        v[idxV(i,j)] -= grad_scale * g;
+                }
             }
         }
         applyBoundary();
@@ -197,7 +198,6 @@ void FluidSim::projectVelocity() {
 void FluidSim::advectVelocity() {
         for (int j = 0; j < Ny; ++j) {
             for (int i = 0; i <= Nx; ++i) {
-                setWallFaces(i,j);
                 double x = i*dx;
                 double y = (j + 0.5)*dx;
                 double ux, vy;sampleVelocity(x, y, ux, vy);
@@ -208,7 +208,6 @@ void FluidSim::advectVelocity() {
         }
         for (int j = 0; j <= Ny; ++j) {
             for (int i = 0; i < Nx; ++i) {
-                setWallFaces(i,j);
                 double x = (i + 0.5)*dx;
                 double y = j*dx;
                 double ux, vy; sampleVelocity(x, y, ux, vy);
@@ -224,18 +223,23 @@ void FluidSim::advectVelocity() {
 
 
 void FluidSim::advectDye() {
+        std::fill(dye_tmp.begin(), dye_tmp.end(), 0.0);
         for (int j = 0; j < Ny; ++j) {
             for (int i = 0; i < Nx; ++i) {
-                setWallFaces(i,j);
-                double x = (i + 0.5)*dx;
-                double y = (j + 0.5)*dx;
-                double ux, vy; sampleVelocity(x, y, ux, vy);
-                double x0 = clamp(x - dt*ux, 0.0, Nx*dx);
-                double y0 = clamp(y - dt*vy, 0.0, Ny*dx);
-                dye_tmp[idxP(i,j)] = sampleScalar(dye, x0, y0);
+                if (isFluid(i,j)){
+                        double x = (i + 0.5)*dx;
+                        double y = (j + 0.5)*dx;
+                        double ux, vy; sampleVelocity(x, y, ux, vy);
+                        double x0 = clamp(x - dt*ux, 0.0, Nx*dx);
+                        double y0 = clamp(y - dt*vy, 0.0, Ny*dx);
+                        dye_tmp[idxP(i,j)] = sampleScalar(dye, x0, y0);
+                } else {
+                        dye[idxP(i,j)] = 0.0;
+                }
             }
         }
         dye.swap(dye_tmp);
+        
         for (double &s : dye) s = clamp(s, 0.0, 1.0);
 }
 
@@ -243,7 +247,6 @@ void FluidSim::advectDye() {
 void FluidSim::addForces() {
         for (int j = 0; j <= Ny; ++j) {
             for (int i = 0; i < Nx; ++i) {
-                setWallFaces(i,j); // Set wall faces for solid cells
                 v[idxV(i,j)] += dt * gravity;
             }
         }
@@ -257,7 +260,7 @@ void FluidSim::addInflow() {
                 dye[idxP(i,j)] = 1.0;
                 }
                 if (Nx >= 2) {
-                u[idxU(1, j)] = 2.0;
+                u[idxU(1, j)] = 9.0;
                 }
         }
 }
@@ -272,41 +275,66 @@ void FluidSim::adaptDt() {
 }
 
 
-void FluidSim::setWallFaces(int i, int j){
-
-        if (getSolid(i,j)){
-               u[idxU(i, j)] = 0.0;
-               u[idxU(i + 1,j)] = 0.0;
-               v[idxV(i, j)] = 0.0;
-               v[idxV(i, j + 1)] = 0.0;
-        } else {
-                // Set Left Face
-                if (getSolid(i-1,j))
-                u[idxU(i, j)] = 0.0;  
-                
-                // Set Right Face
-                if (getSolid(i+1, j))
-                u[idxU(i + 1,j)] = 0.0;
-
-                // Set Bottom Face
-                if (getSolid(i, j-1))
-                v[idxV(i, j)] = 0.0;
-
-                // Set Top Face
-                if (getSolid(i, j+1))
-                v[idxV(i, j + 1)] = 0.0;
-        }
- 
-}
-
-
 void FluidSim::step() {
         addInflow();
         adaptDt();
+        enforceWallFaces();
         advectVelocity();
+        enforceWallFaces();
         addForces();
         computeDivergence();
         solvePressure();
         projectVelocity();
+        enforceWallFaces();
         advectDye();
+}
+
+
+bool FluidSim::isFluid(int i, int j){
+        if(!inBounds(i,j)){
+                return false;
+        }
+        return cellState[i + (Nx * j)];
+}
+
+
+
+void FluidSim::setWallFaces(int i, int j){
+
+        if(!inBounds(i,j)) {return;}
+
+        if(!isFluid(i,j)){
+                u[idxU(i, j)] = 0.0;
+                u[idxU(i + 1,j)] = 0.0;
+                v[idxV(i, j)] = 0.0;
+                v[idxV(i, j + 1)] = 0.0;
+        }
+
+        // Set Left Face
+        if (!isFluid(i-1,j)) {u[idxU(i, j)] = 0.0;} 
+
+        // Set Right Face
+        if (!isFluid(i+1, j)) {u[idxU(i + 1,j)] = 0.0;}
+
+        // Set Bottom Face
+        if (!isFluid(i, j-1)) {v[idxV(i, j)] = 0.0;}
+
+        // Set Top Face
+        if (!isFluid(i, j+1)) {v[idxV(i, j + 1)] = 0.0;}
+ 
+}
+
+
+bool FluidSim::inBounds(int i, int j) {
+    return (i >= 0 && i < Nx && j >= 0 && j < Ny);
+}
+
+
+
+void FluidSim::enforceWallFaces(){
+        for (int j = 0; j < Ny; ++j) {
+            for (int i = 0; i < Nx; ++i) {
+                setWallFaces(i,j);
+            }
+        }
 }
