@@ -9,15 +9,23 @@ FluidSim::FluidSim(int Nx_, int Ny_, double dx_){
         gravity = -9.8;
         cfl = 0.5;
         dt = 0.01;
-        poisson_iters = 25;
+        poisson_iters = 100;
         u = std::vector<double>((Nx+1)*Ny, 0.0);
         v = std::vector<double>(Nx*(Ny+1), 0.0);
+        
         u_tmp = std::vector<double>((Nx+1)*Ny, 0.0);
         v_tmp = std::vector<double>(Nx*(Ny+1), 0.0);
+        
         p = std::vector<double>(Nx*Ny, 0.0);
         div = std::vector<double>(Nx*Ny, 0.0);
+        
         dye = std::vector<double>(Nx*Ny, 0.0); 
         dye_tmp = std::vector<double>(Nx*Ny, 0.0);
+
+        a_diag = std::vector<double>(Nx*Ny, 0.0);
+        a_plusI = std::vector<double>(Nx*Ny, 0.0);
+        a_plusJ = std::vector<double>(Nx*Ny, 0.0);
+
         cellState = std::vector<bool>(Nx*Ny, true);
 }
 
@@ -113,6 +121,17 @@ void FluidSim::computeDivergence() {
                 double dv_dy = (v[idxV(i,j+1)] - v[idxV(i,j)]) * invdx;
                 div[idxP(i,j)] = du_dx + dv_dy;
             }
+        }
+}
+
+
+void FluidSim::applyA(std::vector<double> pressureVals, std::vector<double> results){
+        for (int j; Ny-1; j++){
+                for (int i = 0; Nx - 1; i++){
+
+                        // S
+
+                }
         }
 }
 
@@ -253,14 +272,15 @@ void FluidSim::addForces() {
         applyBoundary();
 }
 
+
 void FluidSim::addInflow() {
-        int i_max = std::min(1, Nx/2);
-        for (int j = Ny/3; j < 2*Ny/3; ++j) {
+        int i_max = 2;
+        for (int j = 1; j < Ny - 1; ++j){
                 for (int i = 0; i < i_max; ++i) {
-                dye[idxP(i,j)] = 1.0;
+                        dye[idxP(i,j)] = 1.0;
                 }
                 if (Nx >= 1) {
-                u[idxU(1, j)] = 9.0;
+                        u[idxU(1, j)] = 2.0;
                 }
         }
 }

@@ -1,0 +1,27 @@
+#pragma once
+#include <vector>
+#include <iostream>
+
+
+
+class MatrixA {
+
+    public:;
+        // 2D Representation of 2D Matrix
+        std::vector<double> aDiag, aPlusI, aPlusJ;
+        int Nx_, Ny_;
+        
+
+        MatrixA(int Nx, int Ny, double dt, double rho, double dx, std::vector<bool> fluidState);
+
+        // Index helper function
+        inline int idx(int i, int j) const { return i + Nx_*j; }
+
+        // Comput y = A * x
+        void applyA(std::vector<double>& givenPressure, std::vector<double>& resultPressure, std::vector<bool>& fluidState);
+
+
+        void createAMatrices(int Nx, int Ny, double dt, double rho, double dx, std::vector<bool> fluidState);
+};
+
+

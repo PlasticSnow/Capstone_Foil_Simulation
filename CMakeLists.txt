@@ -5,6 +5,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O2")
+
 set(CMAKE_PREFIX_PATH "/opt/homebrew/opt/sfml@2/lib/cmake/SFML/")
 
 find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
@@ -15,4 +17,3 @@ file(GLOB SOURCES "src/*.cpp")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system)
-

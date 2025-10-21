@@ -1,6 +1,8 @@
+#pragma once
 #include <vector>
+#include "CoefficientMatrixA.hpp"
 
-#pragma include
+
 
 
 class FluidSim{
@@ -23,6 +25,10 @@ class FluidSim{
     // v = vertical velocity (size: Nx * (Ny+1))
     std::vector<double> u, v, u_tmp, v_tmp;
     std::vector<double> p, div, dye, dye_tmp;
+    std::vector<double> a_diag, a_plusI, a_plusJ;
+
+    // MatrixA matrixA;
+
 
     inline int idxP(int i, int j) const { return i + Nx*j; }
     inline int idxU(int i, int j) const { return i + (Nx+1)*j; }
@@ -58,6 +64,8 @@ class FluidSim{
     // Compute divergence of velocity field (for incompressibility) ------------    
     void computeDivergence();
 
+    // Laplacian Operator it applies pessureVals by implicit Laplacian matrix A and stores the result in y
+    void applyA(std::vector<double> pressureVals, std::vector<double> results);
 
     // Solve pressure Poisson equation ∇²p = (ρ/Δt) ∇·u ---------------
     void solvePressure();
