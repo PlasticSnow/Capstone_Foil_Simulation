@@ -1,8 +1,16 @@
 #pragma once
 #include <vector>
+#include <numeric>
+#include <algorithm>
+#include <cmath>
 #include "CoefficientMatrixA.hpp"
 
-
+enum Operation {
+    Add,
+    Sub,
+    Mult,
+    Divide
+};
 
 
 class FluidSim{
@@ -13,8 +21,10 @@ class FluidSim{
     double rho;         // density
     double gravity;     // gravity (acts on v)
     double cfl;         // CFL safety factor
-    double dt;          // current dt
+    double dt;          // current dt (time step)
     int poisson_iters;  // iterations for pressure solve
+    double tol;         // tolerance for divergence
+
 
     // Is Cell Solid
     std::vector<bool> cellState;
@@ -24,10 +34,11 @@ class FluidSim{
     // u = horizontal velocity (size: (Nx+1) * Ny)
     // v = vertical velocity (size: Nx * (Ny+1))
     std::vector<double> u, v, u_tmp, v_tmp;
-    std::vector<double> p, div, dye, dye_tmp;
+    std::vector<double> p, pGuess, pTemp, auxZ, searchS, residual;
+    std::vector<double> rhs, dye, dye_tmp;
     std::vector<double> a_diag, a_plusI, a_plusJ;
 
-    // MatrixA matrixA;
+    MatrixA matrixA;
 
 
     inline int idxP(int i, int j) const { return i + Nx*j; }
@@ -41,7 +52,6 @@ class FluidSim{
 
 
     static double clamp(double x, double a, double b);
-
 
 
     double sampleScalar(const std::vector<double>& s, double x, double y) const;
@@ -62,14 +72,11 @@ class FluidSim{
 
 
     // Compute divergence of velocity field (for incompressibility) ------------    
-    void computeDivergence();
+    void computeRHS();
 
-    // Laplacian Operator it applies pessureVals by implicit Laplacian matrix A and stores the result in y
-    void applyA(std::vector<double> pressureVals, std::vector<double> results);
 
     // Solve pressure Poisson equation ∇²p = (ρ/Δt) ∇·u ---------------
-    void solvePressure();
-
+    void cgPressureSolver();
 
     // Subtract pressure gradient from velocity field (projection) -----
     void projectVelocity();
@@ -92,7 +99,7 @@ class FluidSim{
 
 
     // Adapt time step based on max velocity (CFL condition) -------------------
-    void adaptDt();
+    void calculateTimeStep();
 
     /** 
      * @brief Contains all the functions needed in order to update the simulation
@@ -120,5 +127,15 @@ class FluidSim{
     bool inBounds(int i, int j);
 
     void enforceWallFaces();
+
+    std::vector<double> preConditioner(std::vector<double> residuals);
+
+    double dotProduct(const std::vector<double>& a, const std::vector<double>& b) const;
+
+    // void applyScalar(std::vector<double>& v, double scalar, Operation scalarOp);
+
+    void computeResiduals(const std::vector<double>& pGuess, const std::vector<double>& rhs);
+
+    void printMaxDivergence();
 
 };

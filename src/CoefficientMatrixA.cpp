@@ -1,6 +1,14 @@
 #include "CoefficientMatrixA.hpp"
 
 
+MatrixA::MatrixA(){
+    Nx_ = 1;
+    Ny_ = 1;
+    aDiag = std::vector<double>(Nx_*Ny_, 0.0);
+    aPlusI = std::vector<double>(Nx_*Ny_, 0.0);
+    aPlusJ = std::vector<double>(Nx_*Ny_, 0.0);
+}
+
 MatrixA::MatrixA(int Nx, int Ny, double dt, double rho, double dx, std::vector<bool> fluidState){
     Nx_ = Nx;
     Ny_ = Ny;
@@ -21,19 +29,23 @@ MatrixA::MatrixA(int Nx, int Ny, double dt, double rho, double dx, std::vector<b
 }
 
 
-void MatrixA::applyA(std::vector<double>& givenPs, std::vector<double>& resultPs, std::vector<bool>& fluidState){
+void MatrixA::applyA(const std::vector<double>& givenPs, std::vector<double>& resultPs, const std::vector<bool>& fluidState){
     for (int j = 0; j < Ny_; j++){
         for (int i = 0; i < Nx_; i++){
             
+            int index = idx(i, j);
+
             // Check to see if solid or empty, if so skip
-            if (!fluidState[idx(i,j)])
+            if (!fluidState[index]){
+                resultPs[index] = 0.0;
                 continue;
+            }
 
 
             double sum = 0.0;
 
             // Diagonal term: multiply by itself
-            sum += aDiag[idx(i,j)] * givenPs[idx(i,j)];
+            sum += aDiag[index] * givenPs[index];
 
             // Right neighbor
             if (i < Nx_ - 1 && fluidState[idx(i+1,j)]){
@@ -56,21 +68,21 @@ void MatrixA::applyA(std::vector<double>& givenPs, std::vector<double>& resultPs
             }
 
             // Store result
-            resultPs[idx(i,j)] = sum;
+            resultPs[index] = sum;
 
         }
     }
 }
 
 
-void MatrixA::createAMatrices(int Nx, int Ny, double dt, double rho, double dx, std::vector<bool> fluidState){
+void MatrixA::createAMatrices(int Nx, int Ny, double dt, double rho, double dx,const std::vector<bool>& fluidState){
     double scale = dt / (rho*dx*dx);
 
     std::cout << "About to create A Matrices" << std::endl;
 
     for (int j = 0; j < Ny; j++){
         for (int i = 0; i < Nx; i++){
-
+            
             
             if (i < Nx - 1){
 

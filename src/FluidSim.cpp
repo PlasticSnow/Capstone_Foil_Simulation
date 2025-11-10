@@ -1,5 +1,12 @@
 #include "FluidSim.hpp"
 
+inline double maxAbs(const std::vector<double>& v) {
+    double maxVal = 0.0;
+    for (double x : v)
+        maxVal = std::max(maxVal, std::fabs(x));
+    return maxVal;
+}
+
 
 FluidSim::FluidSim(int Nx_, int Ny_, double dx_){
         Nx = Nx_;
@@ -7,9 +14,11 @@ FluidSim::FluidSim(int Nx_, int Ny_, double dx_){
         dx = dx_; 
         rho = 1.0; 
         gravity = -9.8;
-        cfl = 0.5;
-        dt = 0.01;
-        poisson_iters = 100;
+        cfl = 1.0;
+        dt = 0.1;
+        poisson_iters = 500;
+        tol = 1e-4;
+
         u = std::vector<double>((Nx+1)*Ny, 0.0);
         v = std::vector<double>(Nx*(Ny+1), 0.0);
         
@@ -17,16 +26,22 @@ FluidSim::FluidSim(int Nx_, int Ny_, double dx_){
         v_tmp = std::vector<double>(Nx*(Ny+1), 0.0);
         
         p = std::vector<double>(Nx*Ny, 0.0);
-        div = std::vector<double>(Nx*Ny, 0.0);
+        rhs = std::vector<double>(Nx*Ny, 0.0);
+
+        pGuess = std::vector<double>(Nx*Ny, 0.0);
+        pTemp = std::vector<double>(Nx*Ny, 0.0);
+        auxZ = std::vector<double>(Nx*Ny, 0.0);
+        searchS = std::vector<double>(Nx*Ny, 0.0);
+        residual = std::vector<double>(Nx*Ny, 0.0);
         
         dye = std::vector<double>(Nx*Ny, 0.0); 
         dye_tmp = std::vector<double>(Nx*Ny, 0.0);
 
-        a_diag = std::vector<double>(Nx*Ny, 0.0);
-        a_plusI = std::vector<double>(Nx*Ny, 0.0);
-        a_plusJ = std::vector<double>(Nx*Ny, 0.0);
-
         cellState = std::vector<bool>(Nx*Ny, true);
+
+        matrixA = MatrixA(Nx, Ny, dt, rho, dx, cellState);
+
+        calculateTimeStep();
 }
 
 double FluidSim::clamp(double x, double a, double b) {
@@ -113,105 +128,229 @@ void FluidSim::applyBoundary() {
 }
 
 
-void FluidSim::computeDivergence() {
-        const double invdx = 1.0/dx;
-        for (int j = 0; j < Ny; ++j) {
-            for (int i = 0; i < Nx; ++i) {
-                double du_dx = (u[idxU(i+1,j)] - u[idxU(i,j)]) * invdx;
-                double dv_dy = (v[idxV(i,j+1)] - v[idxV(i,j)]) * invdx;
-                div[idxP(i,j)] = du_dx + dv_dy;
+void FluidSim::computeRHS() {
+    const double scale = 1.0 / dx;  // divergence scale
+    for (int j = 0; j < Ny; ++j) {
+        for (int i = 0; i < Nx; ++i) {
+            if (!isFluid(i,j)) {
+                rhs[idxP(i,j)] = 0.0;
+                continue;
             }
-        }
-}
 
-
-void FluidSim::applyA(std::vector<double> pressureVals, std::vector<double> results){
-        for (int j; Ny-1; j++){
-                for (int i = 0; Nx - 1; i++){
-
-                        // S
-
-                }
-        }
-}
-
-
-void FluidSim::solvePressure() {
-        const double scale = rho / dt;
-        std::fill(p.begin(), p.end(), 0.0);
-        for (int it = 0; it < poisson_iters; ++it) {
-            for (int j = 0; j < Ny; ++j) {
-                for (int i = 0; i < Nx; ++i) {
-
-                        if(isFluid(i,j)){
-
-                                int count = 0;
-                                double sum = 0.0;
-
-
-                                // Check if Left neighbor is Fluid 
-                                if (isFluid(i-1, j)){
-                                        count++;
-                                        sum += p[idxP(i-1,j)];
-                                }
-
-                                // Check if Right neighbor is Fluid
-                                if (isFluid(i+1,j)){
-                                        count++;
-                                        sum += p[idxP(i+1,j)];
-                                }
-
-                                // Check if Bottom neighbor is Fluid
-                                if (isFluid(i,j-1)){
-                                        count++;
-                                        sum += p[idxP(i,j-1)];
-                                }
-
-
-                                // Check if Top neighbor is Fluid
-                                if (isFluid(i,j+1)){
-                                        count++;
-                                        sum += p[idxP(i,j+1)];
-                                }
-
-                                // Pressure Calculation if Count is Not 0 meaning it's not a wall or surrounded by walls
-                                if (count != 0){
-                                        double rhs = scale * div[idxP(i,j)];
-                                        p[idxP(i,j)] = (sum - rhs * dx*dx) / count;
-                                }
-
-                                
-                        } else {
-                                continue;
+            double div = 0.0;
+                if(isFluid(i,j)){
+                        // Right face
+                        if (i + 1 < Nx) {
+                                if (isFluid(i+1,j)) div += u[idxU(i+1,j)];
                         }
-                    
+                        // Left face
+                        if (i >= 0) {
+                                if (isFluid(i-1,j)) div -= u[idxU(i,j)];
+                        }
+
+                        // Top face
+                        if (j + 1 < Ny) {
+                                if (isFluid(i,j+1)) div += v[idxV(i,j+1)];
+                        }
+                        // Bottom face
+                        if (j >= 0) {
+                                if (isFluid(i,j-1)) div -= v[idxV(i,j)];
+                        }
+
+                        rhs[idxP(i,j)] = div * -scale;
                 }
-            }
+            
         }
+    }
 }
+
+
+// void FluidSim::cgPressureSolver(){
+//         double scale = dt / (rho*dx*dx);
+//         int iteration = 0;
+//         double alpha;
+
+//         // Set initial guess p = 0
+//         std::fill(pGuess.begin(), pGuess.end(), 0);
+
+//         // Set residual vector
+//         computeResiduals(pGuess, rhs);
+
+//         // Set auxilery vector z and search vector s = z
+//         auxZ = residual;
+//         searchS = auxZ;
+
+//         //
+//         double sigma = dotProduct(auxZ, residual);
+
+//         // Loop until solved or iterations exceeded
+//         for (int iters = 0; iters < poisson_iters; iters++){
+
+//                 // Set auxiliary vector z to applyA(s)
+//                 matrixA.applyA(searchS, auxZ, cellState);
+
+//                 // Calculate denom for alpha and make sure no divide by zero
+//                 double denom = dotProduct(searchS, auxZ);
+//                 if (fabs(denom) < 1e-20) break; 
+
+//                 // Calculate alpha
+//                 alpha = sigma/denom;
+
+//                 int index;
+//                 double maxR = 0;
+//                 for (int j = 0; j < Ny; j++){
+//                         for (int i = 0; i < Nx; i++){
+//                                 index = idxP(i,j);
+
+//                                 // If solid skip
+//                                 if (!cellState[index]) continue;
+
+//                                 // Update guess pressures
+//                                 pGuess[index] += alpha * searchS[index];
+                                
+
+//                                 // Update residuals
+//                                 residual[index] -= alpha * auxZ[index];
+
+//                                 maxR = std::max(maxR, fabs(residual[index]));
+//                         }
+//                 }
+
+//                 // If residual lower than tol update pressure with pGuess and end
+//                 if (maxR <= tol){
+//                         std::cout << "CG converged in " << iters << " iterations\n";
+//                         p = pGuess;
+//                         return;
+//                 }
+                
+//                 auxZ = residual;
+
+//                 double newSigma = dotProduct(auxZ, residual);
+
+//                 double beta = newSigma / sigma;
+
+//                 // Set search vector s = z + Bs
+//                 for (int i = 0; i < searchS.size(); i++){
+//                         searchS[i] = auxZ[i] + (searchS[i] * beta);
+//                 }
+
+//                 // Update sigma
+//                 sigma = newSigma;
+
+//                 // Reset maxR
+//                 maxR = 0.0;
+//         }
+
+//         // If max iterations exceeded
+//         std::cout << "Max Iterations reached " + std::to_string(poisson_iters) << std::endl;
+//         p = pGuess;
+        
+// }
+
+
+void FluidSim::cgPressureSolver() {
+    const double scale = dt / (rho * dx * dx);
+    const int N = Nx * Ny;
+    double alpha, beta, sigma, newSigma;
+
+    // --- Early-out if nearly divergence-free ---
+    if (maxAbs(rhs) < 1e-8) return;
+
+    // --- Initial setup (pGuess preallocated) ---
+    std::fill(pGuess.begin(), pGuess.end(), 0.0);
+
+    // Compute initial residual (r = b - A*p)
+    computeResiduals(pGuess, rhs);
+
+    // Initialize auxiliary vectors
+    auxZ = residual;    // Preconditioner could go here if used
+    searchS = auxZ;
+
+    sigma = dotProduct(auxZ, residual);
+
+    double relTol = 1e-4;
+    double absTol = 1e-8;
+    double r0 = std::sqrt(sigma);
+    double maxR = 0.0;
+
+    for (int iters = 0; iters < poisson_iters; ++iters) {
+        // --- A*s step ---
+        matrixA.applyA(searchS, auxZ, cellState);
+
+        // --- Compute alpha ---
+        double denom = dotProduct(searchS, auxZ);
+        if (fabs(denom) < 1e-20) break;
+        alpha = sigma / denom;
+
+        // --- Update p and residual ---
+        maxR = 0.0;
+
+        // Unroll inner loop, no branching in hot path
+        #pragma omp simd reduction(max:maxR)
+        for (int i = 0; i < N; ++i) {
+            if (!cellState[i]) continue;
+            pGuess[i] += alpha * searchS[i];
+            residual[i] -= alpha * auxZ[i];
+            maxR = std::max(maxR, fabs(residual[i]));
+        }
+
+        // --- Convergence check ---
+        double relRes = maxR / (r0 + 1e-20);
+        if (maxR <= absTol || relRes <= relTol) {
+            std::cout << "CG converged in " << iters << " iterations\n";
+            p = pGuess;
+            return;
+        }
+
+        // --- Compute new direction ---
+        auxZ = residual;  // (if preconditioned, apply M^-1 here)
+        newSigma = dotProduct(auxZ, residual);
+        beta = newSigma / sigma;
+
+        // Update search direction: s = z + beta*s
+        #pragma omp simd
+        for (int i = 0; i < N; ++i) {
+            searchS[i] = auxZ[i] + beta * searchS[i];
+        }
+
+        sigma = newSigma;
+    }
+
+    std::cout << "Max iterations reached " << poisson_iters << std::endl;
+    p = pGuess;
+}
+
+
 
 
 void FluidSim::projectVelocity() {
         const double grad_scale = dt / (rho * dx);
-        for (int j = 0; j < Ny; ++j) {
-            for (int i = 1; i < Nx; ++i) {
-                if (isFluid(i-1, j) && isFluid(i,j)){
-                        double g = p[idxP(i,j)] - p[idxP(i-1,j)];
-                        u[idxU(i,j)] -= grad_scale * g;
-                }
-            }
-        }
-        for (int j = 1; j < Ny; ++j) {
-            for (int i = 0; i < Nx; ++i) {
 
-                if (isFluid(i, j-1) && isFluid(i,j)){
-                        double g = p[idxP(i,j)] - p[idxP(i,j-1)];
-                        v[idxV(i,j)] -= grad_scale * g;
+
+        // U velocities (vertical faces)
+        for (int j = 0; j < Ny; ++j) {
+        for (int i = 0; i <= Nx; ++i) {
+                // Skip boundaries if not fluid on both sides
+                if (i == 0 || i == Nx) continue;
+                if (isFluid(i-1,j) && isFluid(i,j)) {
+                u[idxU(i,j)] -= grad_scale * (p[idxP(i,j)] - p[idxP(i-1,j)]);
                 }
-            }
         }
+        }
+
+        // V velocities (horizontal faces)
+        for (int j = 0; j <= Ny; ++j) {
+        for (int i = 0; i < Nx; ++i) {
+                if (j == 0 || j == Ny) continue;
+                if (isFluid(i,j-1) && isFluid(i,j)) {
+                v[idxV(i,j)] -= grad_scale * (p[idxP(i,j)] - p[idxP(i,j-1)]);
+                }
+        }
+        }
+
         applyBoundary();
-    }
+
+}
 
 
 void FluidSim::advectVelocity() {
@@ -280,13 +419,13 @@ void FluidSim::addInflow() {
                         dye[idxP(i,j)] = 1.0;
                 }
                 if (Nx >= 1) {
-                        u[idxU(1, j)] = 2.0;
+                        u[idxU(1, j)] = 1.0;
                 }
         }
 }
 
 
-void FluidSim::adaptDt() {
+void FluidSim::calculateTimeStep() {
         double maxu = 1e-8;
         for (double val : u) maxu = std::max(maxu, std::abs(val));
         for (double val : v) maxu = std::max(maxu, std::abs(val));
@@ -297,17 +436,24 @@ void FluidSim::adaptDt() {
 
 void FluidSim::step() {
         addInflow();
-        adaptDt();
+        addForces();
+        
         enforceWallFaces();
         advectVelocity();
         enforceWallFaces();
-        addForces();
-        computeDivergence();
-        solvePressure();
+
+        computeRHS();
+
+        cgPressureSolver();
+
         projectVelocity();
+
+        printMaxDivergence();
+
         enforceWallFaces();
         advectDye();
 }
+
 
 
 bool FluidSim::isFluid(int i, int j){
@@ -358,3 +504,53 @@ void FluidSim::enforceWallFaces(){
             }
         }
 }
+
+// Stub pre conditioner function currentlly just returns itself
+std::vector<double> FluidSim::preConditioner(std::vector<double> residuals){
+        for (double r : residuals){
+                r = r * 1;
+        }
+        return residuals;
+}
+
+
+
+double FluidSim::dotProduct(const std::vector<double>& a, const std::vector<double>& b) const {
+    double sum = 0.0;
+    for (int j = 0; j < Ny; ++j) {
+        for (int i = 0; i < Nx; ++i) {
+            int index = idxP(i, j);
+            if (!cellState[index]) continue; // Skip solids
+            sum += a[index] * b[index];
+        }
+    }
+    return sum;
+}
+
+void FluidSim::computeResiduals(const std::vector<double>& pGuess, const std::vector<double>& rhs){
+        matrixA.applyA(pGuess, pTemp, cellState);
+        for (int i = 0; i < rhs.size(); i++){
+                residual[i] = rhs[i] - pTemp[i];
+        }
+}
+
+
+
+void FluidSim::printMaxDivergence() {
+    const double scale = 1.0 / dx;
+    double maxDiv = 0.0;
+    for (int j = 0; j < Ny; ++j) {
+        for (int i = 0; i < Nx; ++i) {
+            if (!isFluid(i,j)) continue;
+            double du_dx = u[idxU(i+1,j)] - u[idxU(i,j)];
+            double dv_dy = v[idxV(i,j+1)] - v[idxV(i,j)];
+            double div = -scale * (du_dx + dv_dy);
+            maxDiv = std::max(maxDiv, std::abs(div));
+        }
+    }
+    std::cout << "Max divergence: " << maxDiv << std::endl;
+}
+
+
+
+

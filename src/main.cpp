@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
     } else {
 
         int Nx = 100, Ny = 100;
-        double dx = 1.0 / Nx;
+        double dx = 1.0/Nx;
 
         std::vector<Point> rectangleOne = createRectangle((Nx/2) - 2, (Ny/2) - 2,  2 , 2);
         for (Point point : rectangleOne){
@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
 
         std::vector<Point> rectangleTwo = createRectangle((Nx/2) - 3, (Ny/2) -4,  2 , 2);
 
-        std::vector<Point> rectangleThree = createRectangle(74, 26, 1, (Nx/2)-1);
+        // std::vector<Point> rectangleThree = createRectangle(74, 26, 1, (Nx/2)-1);
 
         std::vector<Point> diagLineOne = createDiagLinePosY(Nx/2, Ny/2, Nx/4);
         for (Point point : diagLineOne){
@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
         sim.setGravity(0);
         // setMultState(sim, rectangleOne);
         // setMultState(sim, rectangleTwo);
-        setMultState(sim, rectangleThree);
+        // setMultState(sim, rectangleThree);
         setMultState(sim, diagLineOne);
         setMultState(sim, diagLineTwo);
 
