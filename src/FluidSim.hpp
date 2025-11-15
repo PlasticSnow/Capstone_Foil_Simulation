@@ -24,6 +24,8 @@ class FluidSim{
     double dt;          // current dt (time step)
     int poisson_iters;  // iterations for pressure solve
     double tol;         // tolerance for divergence
+    double tuningConst, safetyConst;
+    double inflowVelocity;
 
 
     // Is Cell Solid
@@ -34,7 +36,7 @@ class FluidSim{
     // u = horizontal velocity (size: (Nx+1) * Ny)
     // v = vertical velocity (size: Nx * (Ny+1))
     std::vector<double> u, v, u_tmp, v_tmp;
-    std::vector<double> p, pGuess, pTemp, auxZ, searchS, residual;
+    std::vector<double> p, pGuess, pTemp, auxZ, searchS, residual, precon, q, z;
     std::vector<double> rhs, dye, dye_tmp;
     std::vector<double> a_diag, a_plusI, a_plusJ;
 
@@ -128,7 +130,9 @@ class FluidSim{
 
     void enforceWallFaces();
 
-    std::vector<double> preConditioner(std::vector<double> residuals);
+    void createMICPreconditioner();
+
+    void applyPreConditioner(const std::vector<double>& r, std::vector<double>& z) ;
 
     double dotProduct(const std::vector<double>& a, const std::vector<double>& b) const;
 

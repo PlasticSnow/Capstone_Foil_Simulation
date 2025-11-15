@@ -40,7 +40,7 @@ std::vector<Point> createDiagLineNegY(double startX, double startY, int length);
 
 void setMultState(FluidSim &_sim, std::vector<Point>_points);
 
-std::vector<double> getSpectrumColor(double val);
+std::vector<double> getSpectrumColor(double val, bool fluid);
 
 
 int main(int argc, char* argv[]) {
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
         testMatrixASetup(4, 4, 1.0, 1.0, 1.0);
     } else {
 
-        int Nx = 100, Ny = 100;
+        int Nx = 300, Ny = 100;
         double dx = 1.0/Nx;
 
         std::vector<Point> rectangleOne = createRectangle((Nx/2) - 2, (Ny/2) - 2,  2 , 2);
@@ -76,10 +76,10 @@ int main(int argc, char* argv[]) {
         // setMultState(sim, rectangleOne);
         // setMultState(sim, rectangleTwo);
         // setMultState(sim, rectangleThree);
-        setMultState(sim, diagLineOne);
-        setMultState(sim, diagLineTwo);
+        // setMultState(sim, diagLineOne);
+        // setMultState(sim, diagLineTwo);
 
-        int scale = 7; // pixel size per cell
+        int scale = 4; // pixel size per cell
         sf::RenderWindow window(sf::VideoMode(Nx*scale, Ny*scale), "2D Fluid Simulation (Projection)");
         window.setFramerateLimit(60);
 
@@ -87,10 +87,11 @@ int main(int argc, char* argv[]) {
         img.create(Nx, Ny, sf::Color::Black);
         sf::Texture tex;
         sf::Sprite spr;
-        spr.setColor(sf::Color(255, 228, 10));
+        spr.setColor(sf::Color::White);
         tex.create(Nx, Ny);
         spr.setScale((float)scale, (float)scale);
 
+        double cellIndex = 0;
         while (window.isOpen()) {
 
             std::vector<double> color;
@@ -103,20 +104,24 @@ int main(int argc, char* argv[]) {
 
             sim.step();
 
+
+            
             for (int j = 0; j < Ny; ++j) {
                 for (int i = 0; i < Nx; ++i) {
-                    double s = sim.dye[sim.idxP(i,j)];
+                    cellIndex = sim.idxP(i,j);
+                    double s = sim.dye[cellIndex];
 
-                    color = getSpectrumColor(sim.clamp(s, 0.0, 1.0));
-
+                    color = getSpectrumColor(sim.clamp(s, 0.0, 1.0), sim.cellState[cellIndex]);
                     img.setPixel(i, Ny-1-j, sf::Color(color[0],color[1],color[2]));
+                    
+
 
                 }
             }
             tex.update(img);
             spr.setTexture(tex);
 
-            window.clear();
+            window.clear(sf::Color::Black);
             window.draw(spr);
             window.display();
         }
@@ -171,58 +176,32 @@ void setMultState(FluidSim &_sim, std::vector<Point>_points){
 
 
 
-std::vector<double> getSpectrumColor(double val){
-    double r, g, b;
-    // Scale value to 0 - 6
-    double segment = val * 6;
+std::vector<double> getSpectrumColor(double val, bool fluid) {
 
-    // Segment 1: Red -> Yellow (increase Green)
-    if (segment > 0 && segment < 1){
-        r = 255;
-        g = segment * 255;
-        b = 0;
-
-    // Segment 2: Yellow -> Green (decrease Red)
-    } else if (segment >= 1 && segment < 2){
-        r = (2 - segment) * 255;
-        g = 255;
-        b = 0;
-
-    // Segment 3: Green -> Cyan (increase Blue)
-    } else if (segment >= 2 && segment < 3){
-        r = 0;
-        g = 255;
-        b = (segment - 2) * 255;
-
-    // Segment 4: Cyan -> Blue (decrease Green)
-    } else if (segment >= 3 && segment < 4){
-        r = 0;
-        g = (4 - segment) * 255;
-        b = 255;
-
-    // Segment 5: Blue -> Magenta (increase Red) - For full spectrum loop
-    } else if (segment >= 4 && segment < 5){
-        r = (segment - 4) * 255;
-        g = 0;
-        b = 255;
-
-    // Segment 6: Magenta -> Red (decrease Blue) - For full spectrum loop
-    } else if (segment >= 5 && segment <= 6){
-        r = 255;
-        g = 0;
-        b = (6 - segment) * 255;
-
-    // Handle edge cases for t = 1.0 to ensure it's red
-    } else if (segment >= 1) {
-        r = 255;
-        g = 0;
-        b = 0;
-    } else {
-        r = 0;
-        g = 0;
-        b = 0;
+    if (!fluid){
+        return {255.0,255.0,255.0};
     }
 
-    return {floor(r), floor(g), floor(b)};
+    // Clamp input to [0, 1]
+    val = std::clamp(val, 0.0, 1.0);
 
+    // Map value to hue: 0 -> red, 1 -> violet (can tweak range)
+    double hue = (1.0 - val) * 240.0; // 0° = red, 120° = green, 240° = blue
+
+    double s = 1.0; // full saturation
+    double v = 1.0; // full brightness
+
+    double c = v * s;
+    double x = c * (1 - fabs(fmod(hue / 60.0, 2) - 1));
+    double m = v - c;
+
+    double r, g, b;
+    if (hue < 60) { r = c; g = x; b = 0; }
+    else if (hue < 120) { r = x; g = c; b = 0; }
+    else if (hue < 180) { r = 0; g = c; b = x; }
+    else if (hue < 240) { r = 0; g = x; b = c; }
+    else if (hue < 300) { r = x; g = 0; b = c; }
+    else { r = c; g = 0; b = x; }
+
+    return { (r + m) * 255.0, (g + m) * 255.0, (b + m) * 255.0 };
 }

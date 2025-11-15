@@ -75,41 +75,36 @@ void MatrixA::applyA(const std::vector<double>& givenPs, std::vector<double>& re
 }
 
 
-void MatrixA::createAMatrices(int Nx, int Ny, double dt, double rho, double dx,const std::vector<bool>& fluidState){
-    double scale = dt / (rho*dx*dx);
+void MatrixA::createAMatrices(int Nx, int Ny, double dt, double rho, double dx, const std::vector<bool>& fluidState){
+    double scale = 1.0 / (rho * dx * dx); 
 
-    std::cout << "About to create A Matrices" << std::endl;
+    std::fill(aDiag.begin(), aDiag.end(), 0.0);
+    std::fill(aPlusI.begin(), aPlusI.end(), 0.0);
+    std::fill(aPlusJ.begin(), aPlusJ.end(), 0.0);
 
     for (int j = 0; j < Ny; j++){
         for (int i = 0; i < Nx; i++){
-            
-            
-            if (i < Nx - 1){
+            if (!fluidState[idx(i,j)]) continue;
 
-                // If current cell is FLUID and right neighbor is FLUID
-                if (fluidState[idx(i,j)] && fluidState[idx(i+1,j)]){
+            if (i < Nx - 1){
+                if (fluidState[idx(i+1,j)]){
                     aDiag[idx(i,j)] += scale;
                     aDiag[idx(i+1,j)] += scale;
                     aPlusI[idx(i,j)] = -scale;
-                } else if (fluidState[idx(i,j)] && !fluidState[idx(i+1,j)]) {
+                } else {
                     aDiag[idx(i,j)] += scale;
                 }
-
             }
-            
-            if (j < Ny - 1){
 
-                // If current cell is FLUID and bottom neighbor is FLUID
-                if (fluidState[idx(i,j)] && fluidState[idx(i,j+1)]){
+            if (j < Ny - 1){
+                if (fluidState[idx(i,j+1)]){
                     aDiag[idx(i,j)] += scale;
                     aDiag[idx(i,j+1)] += scale;
                     aPlusJ[idx(i,j)] = -scale;
-                } else if (fluidState[idx(i,j)] && !fluidState[idx(i,j+1)]){
+                } else {
                     aDiag[idx(i,j)] += scale;
                 }
-
             }
-
         }
     }
 }
