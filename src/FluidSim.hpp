@@ -134,7 +134,7 @@ class FluidSim{
 
     void applyPreConditioner(const std::vector<double>& r, std::vector<double>& z) ;
 
-    double dotProduct(const std::vector<double>& a, const std::vector<double>& b) const;
+    double dotProduct(const std::vector<double>& a, const std::vector<double>& b);
 
     // void applyScalar(std::vector<double>& v, double scalar, Operation scalarOp);
 

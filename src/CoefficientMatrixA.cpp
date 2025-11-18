@@ -75,34 +75,42 @@ void MatrixA::applyA(const std::vector<double>& givenPs, std::vector<double>& re
 }
 
 
-void MatrixA::createAMatrices(int Nx, int Ny, double dt, double rho, double dx, const std::vector<bool>& fluidState){
-    double scale = 1.0 / (rho * dx * dx); 
+
+void MatrixA::createAMatrices(int Nx, int Ny, double dt, double rho, double dx, const std::vector<bool>& fluidState) {
+    double scale = 1.0 / (dx * dx);  // Poisson scale
 
     std::fill(aDiag.begin(), aDiag.end(), 0.0);
     std::fill(aPlusI.begin(), aPlusI.end(), 0.0);
     std::fill(aPlusJ.begin(), aPlusJ.end(), 0.0);
 
-    for (int j = 0; j < Ny; j++){
-        for (int i = 0; i < Nx; i++){
-            if (!fluidState[idx(i,j)]) continue;
+    for (int j = 0; j < Ny; ++j) {
+        for (int i = 0; i < Nx; ++i) {
+            int idxC = idx(i, j);
+            if (!fluidState[idxC]) continue;
 
-            if (i < Nx - 1){
-                if (fluidState[idx(i+1,j)]){
-                    aDiag[idx(i,j)] += scale;
-                    aDiag[idx(i+1,j)] += scale;
-                    aPlusI[idx(i,j)] = -scale;
+            // X-direction neighbor (right)
+            if (i < Nx - 1) {
+                int idxR = idx(i + 1, j);
+                if (fluidState[idxR]) {
+                    aDiag[idxC] += scale;
+                    aDiag[idxR] += scale;
+                    aPlusI[idxC] = -scale;
                 } else {
-                    aDiag[idx(i,j)] += scale;
+                    // solid or air → treat as Dirichlet wall
+                    aDiag[idxC] += scale;
                 }
             }
 
-            if (j < Ny - 1){
-                if (fluidState[idx(i,j+1)]){
-                    aDiag[idx(i,j)] += scale;
-                    aDiag[idx(i,j+1)] += scale;
-                    aPlusJ[idx(i,j)] = -scale;
+            // Y-direction neighbor (top)
+            if (j < Ny - 1) {
+                int idxT = idx(i, j + 1);
+                if (fluidState[idxT]) {
+                    aDiag[idxC] += scale;
+                    aDiag[idxT] += scale;
+                    aPlusJ[idxC] = -scale;
                 } else {
-                    aDiag[idx(i,j)] += scale;
+                    // solid or air → treat as Dirichlet wall
+                    aDiag[idxC] += scale;
                 }
             }
         }

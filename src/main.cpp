@@ -49,8 +49,8 @@ int main(int argc, char* argv[]) {
         testMatrixASetup(4, 4, 1.0, 1.0, 1.0);
     } else {
 
-        int Nx = 300, Ny = 100;
-        double dx = 1.0/Nx;
+        int Nx = 200, Ny = 200;
+        double dx = .01;
 
         std::vector<Point> rectangleOne = createRectangle((Nx/2) - 2, (Ny/2) - 2,  2 , 2);
         for (Point point : rectangleOne){
@@ -59,14 +59,14 @@ int main(int argc, char* argv[]) {
 
         std::vector<Point> rectangleTwo = createRectangle((Nx/2) - 3, (Ny/2) -4,  2 , 2);
 
-        // std::vector<Point> rectangleThree = createRectangle(74, 26, 1, (Nx/2)-1);
+        std::vector<Point> rectangleThree = createRectangle(74, 26, 1, (Nx/2)-1);
 
-        std::vector<Point> diagLineOne = createDiagLinePosY(Nx/2, Ny/2, Nx/4);
+        std::vector<Point> diagLineOne = createDiagLinePosY(Nx/4, Ny/2, Nx/10);
         for (Point point : diagLineOne){
             std::cout << "(" + std::to_string(point.x) + "," + std::to_string(point.y) + ")" << std::endl;
         }
 
-        std::vector<Point> diagLineTwo = createDiagLineNegY(Nx/2, Ny/2, Nx/4);
+        std::vector<Point> diagLineTwo = createDiagLineNegY(Nx/4, Ny/2, Nx/5);
         for (Point point : diagLineTwo){
             std::cout << "(" + std::to_string(point.x) + "," + std::to_string(point.y) + ")" << std::endl;
         }
@@ -76,8 +76,8 @@ int main(int argc, char* argv[]) {
         // setMultState(sim, rectangleOne);
         // setMultState(sim, rectangleTwo);
         // setMultState(sim, rectangleThree);
-        // setMultState(sim, diagLineOne);
-        // setMultState(sim, diagLineTwo);
+        setMultState(sim, diagLineOne);
+        setMultState(sim, diagLineTwo);
 
         int scale = 4; // pixel size per cell
         sf::RenderWindow window(sf::VideoMode(Nx*scale, Ny*scale), "2D Fluid Simulation (Projection)");
