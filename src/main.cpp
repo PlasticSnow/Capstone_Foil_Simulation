@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
     } else {
 
         int Nx = 200, Ny = 200;
-        double dx = .01;
+        double dx = .001;
 
         std::vector<Point> rectangleOne = createRectangle((Nx/2) - 2, (Ny/2) - 2,  2 , 2);
         for (Point point : rectangleOne){
