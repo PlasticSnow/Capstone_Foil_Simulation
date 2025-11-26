@@ -49,8 +49,8 @@ int main(int argc, char* argv[]) {
         testMatrixASetup(4, 4, 1.0, 1.0, 1.0);
     } else {
 
-        int Nx = 200, Ny = 200;
-        double dx = .001;
+        int Nx = 100, Ny = 100;
+        double dx = .1;
 
         std::vector<Point> rectangleOne = createRectangle((Nx/2) - 2, (Ny/2) - 2,  2 , 2);
         for (Point point : rectangleOne){
@@ -73,11 +73,11 @@ int main(int argc, char* argv[]) {
 
         FluidSim sim(Nx, Ny, dx);
         sim.setGravity(0);
-        // setMultState(sim, rectangleOne);
-        // setMultState(sim, rectangleTwo);
+        setMultState(sim, rectangleOne);
+        setMultState(sim, rectangleTwo);
         // setMultState(sim, rectangleThree);
-        setMultState(sim, diagLineOne);
-        setMultState(sim, diagLineTwo);
+        // setMultState(sim, diagLineOne);
+        // setMultState(sim, diagLineTwo);
 
         int scale = 4; // pixel size per cell
         sf::RenderWindow window(sf::VideoMode(Nx*scale, Ny*scale), "2D Fluid Simulation (Projection)");
@@ -90,6 +90,7 @@ int main(int argc, char* argv[]) {
         spr.setColor(sf::Color::White);
         tex.create(Nx, Ny);
         spr.setScale((float)scale, (float)scale);
+        bool continueSim = true;
 
         double cellIndex = 0;
         while (window.isOpen()) {
@@ -102,7 +103,26 @@ int main(int argc, char* argv[]) {
                     window.close();
             }
 
-            sim.step();
+
+            sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+            int x_ = localPosition.x /scale;
+            int y_ = (Ny*scale - localPosition.y) /scale;
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)){
+                continueSim = false;
+                std::cout << "x: " << x_ << " y: " << y_ << "\n";
+                sim.cellState[sim.idxP(x_,y_)] = false;
+            } else if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
+                continueSim = false;
+                sim.cellState[sim.idxP(x_,y_)] = true;
+            } else {
+                continueSim = true;
+            }
+
+
+            if (continueSim){
+                sim.step();
+            }
+            
 
 
             

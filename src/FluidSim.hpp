@@ -142,4 +142,7 @@ class FluidSim{
 
     void printMaxDivergence();
 
+    inline double catmullRom(double p0, double p1, double p2, double p3, double t) const;
+
+    inline double bicubicCatmullRom(const double *row0, const double *row1, const double *row2, const double *row3, double tx, double ty) const;
 };
