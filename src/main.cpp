@@ -72,9 +72,9 @@ int main(int argc, char* argv[]) {
         }
 
         FluidSim sim(Nx, Ny, dx);
-        sim.setGravity(0);
-        setMultState(sim, rectangleOne);
-        setMultState(sim, rectangleTwo);
+        sim.setGravity(-9.8);
+        // setMultState(sim, rectangleOne);
+        // setMultState(sim, rectangleTwo);
         // setMultState(sim, rectangleThree);
         // setMultState(sim, diagLineOne);
         // setMultState(sim, diagLineTwo);
