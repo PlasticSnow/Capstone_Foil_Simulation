@@ -104,6 +104,11 @@ int main(int argc, char* argv[]) {
             }
 
 
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+                sim = FluidSim(Nx, Ny, dx);
+            }
+
+
             sf::Vector2i localPosition = sf::Mouse::getPosition(window);
             int x_ = localPosition.x /scale;
             int y_ = (Ny*scale - localPosition.y) /scale;
