@@ -13,11 +13,11 @@ FluidSim::FluidSim(int Nx_, int Ny_, double dx_){
         Ny = Ny_; 
         dx = dx_; 
         rho = 0.5; 
-        gravity = 9.8;
+        gravity = -9.8;
         inflowVelocity = 260.0; // Average top end jet
         // inflowVelocity = 10.0;
         cfl = 1.0;
-        dt = cfl * dx / (inflowVelocity / 6);
+        dt = cfl * dx / inflowVelocity;
         std::cout << "dt: " << dt << std::endl;
         poisson_iters = 500;
         tol = 1e-8;
@@ -31,22 +31,22 @@ FluidSim::FluidSim(int Nx_, int Ny_, double dx_){
         u_tmp = std::vector<double>((Nx+1)*Ny, 0.0);
         v_tmp = std::vector<double>(Nx*(Ny+1), 0.0);
         
-        p = std::vector<double>((Nx+1)*Ny, 0.0);
-        rhs = std::vector<double>((Nx+1)*Ny, 0.0);
+        p = std::vector<double>(Nx*Ny, 0.0);
+        rhs = std::vector<double>(Nx*Ny, 0.0);
 
-        pGuess = std::vector<double>((Nx+1)*Ny, 0.0);
-        pTemp = std::vector<double>((Nx+1)*Ny, 0.0);
-        auxZ = std::vector<double>((Nx+1)*Ny, 0.0);
-        searchS = std::vector<double>((Nx+1)*Ny, 0.0);
-        residual = std::vector<double>((Nx+1)*Ny, 0.0);
-        z = std::vector<double>((Nx+1)*Ny, 0.0);
-        q = std::vector<double>((Nx+1)*Ny, 0.0);
-        precon = std::vector<double>((Nx+1)*Ny, 0.0);
+        pGuess = std::vector<double>(Nx*Ny, 0.0);
+        pTemp = std::vector<double>(Nx*Ny, 0.0);
+        auxZ = std::vector<double>(Nx*Ny, 0.0);
+        searchS = std::vector<double>(Nx*Ny, 0.0);
+        residual = std::vector<double>(Nx*Ny, 0.0);
+        z = std::vector<double>(Nx*Ny, 0.0);
+        q = std::vector<double>(Nx*Ny, 0.0);
+        precon = std::vector<double>(Nx*Ny, 0.0);
         
         dye = std::vector<double>(Nx*Ny, 0.0); 
         dye_tmp = std::vector<double>(Nx*Ny, 0.0);
 
-        cellState = std::vector<bool>((Nx+1)*Ny, true);
+        cellState = std::vector<bool>(Nx*Ny, true);
 
         matrixA = MatrixA(Nx, Ny, dt, rho, dx, cellState);
         createMICPreconditioner();
@@ -126,77 +126,71 @@ void FluidSim::sampleVelocity(double x, double y, double& ux, double& vy) const 
 
 
 void FluidSim::applyBoundary() {
-    // --- U velocities (vertical faces) ---
-    for (int j = 0; j <= Ny; ++j) {
+    // U faces: i = 0..Nx, j = 0..Ny-1
+    for (int j = 0; j < Ny; ++j) {
         for (int i = 0; i <= Nx; ++i) {
-            // Left wall (no-slip)
+            // left wall (i==0) no-slip
             if (i == 0) {
                 u[idxU(i,j)] = 0.0;
             }
-            // // Right outflow (zero-gradient)
-            // else if (i == Nx) {
-            //     continue;
-            // }
-            // Internal faces next to solids
+            
+            else if (i == Nx) {
+                u[idxU(Nx,j)] = u[idxU(Nx-1,j)];
+            }
             else {
-                if (!isFluid(i-1,j) || !isFluid(i,j)) u[idxU(i,j)] = 0.0;
+                // interior face next to solid cell
+                if (!isFluid(i-1, j) || !isFluid(i, j)) u[idxU(i,j)] = 0.0;
             }
-
-            // --- V velocities (horizontal faces) ---
-            if (j == 0) {
-                v[idxV(i,j)] = 0.0;
-            }
-            // Top wall (no-slip)
-            else if (j == Ny) {
-                v[idxV(i,j)] = 0.0;
-            }
-            // Internal faces next to solids
-            else {
-                if (!isFluid(i,j-1) || !isFluid(i,j)) v[idxV(i,j)] = 0.0;
-            }
-
-
         }
     }
 
+    // V faces: i = 0..Nx-1, j = 0..Ny
+    for (int i = 0; i < Nx; ++i) {
+        for (int j = 0; j <= Ny; ++j) {
+            if (j == 0) {
+                v[idxV(i,j)] = 0.0;
+            } else if (j == Ny) {
+                v[idxV(i,j)] = 0.0;
+            } else {
+                if (!isFluid(i, j-1) || !isFluid(i, j)) v[idxV(i,j)] = 0.0;
+            }
+        }
+    }
 }
+
 
 
 void FluidSim::computeRHS() {
     const double scale = 1.0 / dx;  // divergence scale
-    for (int j = 0; j <= Ny; ++j) {
-        for (int i = 0; i <= Nx; ++i) {
-            if (i < Nx && !isFluid(i,j)) {
+    for (int j = 0; j < Ny; ++j) {
+        for (int i = 0; i < Nx; ++i) {
+            if (!isFluid(i,j)) {
                 rhs[idxP(i,j)] = 0.0;
                 continue;
             }
 
             double div = 0.0;
-        
-                // Right face
-                if (i == Nx) {
-                    // Free surface: treat outside as air → no neighbor fluid velocity
-                    div += u[idxU(i-1,j)]; // u(i+1,j) = 0 because air has no resistance
-                }
-                else if (isFluid(i+1,j)) {
-                    div += u[idxU(i+1,j)];
-                }
+    
+            // Right face
+            if (isFluid(i+1,j)) {
+                div += u[idxU(i+1,j)];
+            }
 
-                // Left face
-                if (i >= 0 && i <= Nx) {
-                        if (isFluid(i-1,j)) div -= u[idxU(i,j)];
-                }
+            // Left face
+            if (i >= 0 && i <= Nx) {
+                    if (isFluid(i-1,j)) div -= u[idxU(i,j)];
+            }
 
-                // Top face
-                if (j + 1 < Ny) {
-                        if (isFluid(i,j+1)) div += v[idxV(i,j+1)];
-                }
-                // Bottom face
-                if (j >= 0) {
-                        if (isFluid(i,j-1)) div -= v[idxV(i,j)];
-                }
+            // Top face
+            if (j + 1 < Ny) {
+                    if (isFluid(i,j+1)) div += v[idxV(i,j+1)];
+            }
+            // Bottom face
+            if (j >= 0) {
+                    if (isFluid(i,j-1)) div -= v[idxV(i,j)];
+            }
 
-                rhs[idxP(i,j)] = div * -scale;
+            rhs[idxP(i,j)] = div * -scale;
                 
             
         }
@@ -290,13 +284,8 @@ void FluidSim::projectVelocity() {
     applyBoundary();
     const double grad_scale = dt / (rho * dx);
 
-    // computeRHS();
-    // matrixA.createAMatrices(Nx, Ny, dt, rho, dx, cellState);
-    // createMICPreconditioner();
-    // cgPressureSolver();
-
     // --- U velocities ---
-    for (int j = 0; j <= Ny; ++j) {
+    for (int j = 0; j < Ny; ++j) {
         for (int i = 0; i <= Nx; ++i) {
             bool leftFluid  = (i > 0) ? isFluid(i-1,j) : false;
             bool rightFluid = (i < Nx) ? isFluid(i,j) : false;
@@ -314,7 +303,7 @@ void FluidSim::projectVelocity() {
 
     // --- V velocities ---
     for (int j = 0; j <= Ny; ++j) {
-        for (int i = 0; i <= Nx; ++i) {
+        for (int i = 0; i < Nx; ++i) {
             bool bottomFluid = (j > 0) ? isFluid(i,j-1) : false;
             bool topFluid    = (j < Ny) ? isFluid(i,j) : false;
 
@@ -336,7 +325,7 @@ void FluidSim::advectVelocity() {
     applyBoundary(); // enforce walls before advection
 
     // --- U velocities (vertical faces) ---
-    for (int j = 0; j <= Ny; ++j) {
+    for (int j = 0; j < Ny; ++j) {
         for (int i = 0; i <= Nx; ++i) {
             // Skip faces that are fully inside solids
             if (i > 0 && i < Nx && (!isFluid(i-1,j) && !isFluid(i,j))) {
@@ -370,7 +359,7 @@ void FluidSim::advectVelocity() {
 
     // --- V velocities (horizontal faces) ---
     for (int j = 0; j <= Ny; ++j) {
-        for (int i = 0; i <= Nx; ++i) {
+        for (int i = 0; i < Nx; ++i) {
             if (j > 0 && j < Ny && (!isFluid(i,j-1) && !isFluid(i,j))) {
                 v_tmp[idxV(i,j)] = v_tmp[idxV(i,j-1)];
                 continue;
@@ -465,8 +454,11 @@ void FluidSim::addForces() {
 void FluidSim::addInflow() {
     int i0 = 0;
     int i1 = 1;
-    int j_min = Ny/4;
-    int j_max = Ny-Ny/4;
+    int j_min = Ny/8;
+    int j_max = Ny-Ny/8;
+    // int j_min = 0;
+    // int j_max = Ny;
+
 
     for (int j = j_min; j < j_max; ++j) {
         for (int i = i0; i <= i1; ++i) {
@@ -478,28 +470,6 @@ void FluidSim::addInflow() {
                 u[idxU(i, j)] = inflowVelocity;
         }
     }
-
-    // int currentIn = 0;
-    // int minusIn = 0;
-    // for (int j = 1; j < Ny; j++){
-    //     for (int i = 1; i <= 3; i++){
-            
-    //         int pIdx = idxP(i, j);
-            
-    //         if (currentIn <= 10){
-    //             dye[pIdx] = 10.0;
-    //             u[idxU(i,j)] = inflowVelocity;
-    //             currentIn++;
-    //         } else if (minusIn == 10) {
-    //             currentIn = currentIn - minusIn;
-    //             minusIn = 0;
-    //         } else {
-    //             minusIn++;
-    //         }
-            
-
-    //     }
-    // }
 
     applyBoundary();
 }
@@ -752,3 +722,12 @@ void FluidSim::printMaxDivergence() {
     std::cout << "Max normalized divergence: " << maxDiv << std::endl;
 }
 
+
+
+void FluidSim::resetPressure(){
+    std::fill(u.begin(), u.end(), 0.0);
+    std::fill(v.begin(), v.end(), 0.0); 
+    std::fill(p.begin(), p.end(), 0.0);
+    std::fill(rhs.begin(), rhs.end(), 0.0);
+    std::fill(dye.begin(), dye.end(), 0.0);
+}

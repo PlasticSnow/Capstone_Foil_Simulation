@@ -4,9 +4,9 @@
 MatrixA::MatrixA(){
     Nx_ = 1;
     Ny_ = 1;
-    aDiag = std::vector<double>((Nx_+1)*Ny_, 0.0);
-    aPlusI = std::vector<double>((Nx_+1)*Ny_, 0.0);
-    aPlusJ = std::vector<double>((Nx_+1)*Ny_, 0.0);
+    aDiag = std::vector<double>(Nx_*Ny_, 0.0);
+    aPlusI = std::vector<double>(Nx_*Ny_, 0.0);
+    aPlusJ = std::vector<double>(Nx_*Ny_, 0.0);
 }
 
 MatrixA::MatrixA(int Nx, int Ny, double dt, double rho, double dx, std::vector<bool> fluidState){
@@ -15,9 +15,9 @@ MatrixA::MatrixA(int Nx, int Ny, double dt, double rho, double dx, std::vector<b
     
     std::cout << "Making MatrixA" << std::endl;
 
-    aDiag = std::vector<double>((Nx+1)*Ny, 0.0);
-    aPlusI = std::vector<double>((Nx+1)*Ny, 0.0);
-    aPlusJ = std::vector<double>((Nx+1)*Ny, 0.0);
+    aDiag = std::vector<double>(Nx*Ny, 0.0);
+    aPlusI = std::vector<double>(Nx*Ny, 0.0);
+    aPlusJ = std::vector<double>(Nx*Ny, 0.0);
 
     std::cout << "Initialized A vectors" << std::endl;
 
@@ -30,8 +30,8 @@ MatrixA::MatrixA(int Nx, int Ny, double dt, double rho, double dx, std::vector<b
 
 
 void MatrixA::applyA(const std::vector<double>& givenPs, std::vector<double>& resultPs, const std::vector<bool>& fluidState){
-    for (int j = 0; j <= Ny_; j++){
-        for (int i = 0; i <= Nx_; i++){
+    for (int j = 0; j < Ny_; j++){
+        for (int i = 0; i < Nx_; i++){
             
             int index = idx(i, j);
 
@@ -77,42 +77,79 @@ void MatrixA::applyA(const std::vector<double>& givenPs, std::vector<double>& re
 
 
 void MatrixA::createAMatrices(int Nx, int Ny, double dt, double rho, double dx, const std::vector<bool>& fluidState) {
-    double scale = 1.0 / (dx * dx);  // Poisson scale
+    double scale = 1.0 / (dx * dx);
 
     std::fill(aDiag.begin(), aDiag.end(), 0.0);
     std::fill(aPlusI.begin(), aPlusI.end(), 0.0);
     std::fill(aPlusJ.begin(), aPlusJ.end(), 0.0);
 
-    for (int j = 0; j <= Ny; ++j) {
-        for (int i = 0; i <= Nx; ++i) {
-            int idxC = idx(i, j);
-            if (!fluidState[idxC]) continue;
-
-            // X-direction neighbor (right)
-            if (i < Nx - 1) {
-                int idxR = idx(i + 1, j);
-                if (fluidState[idxR]) {
-                    aDiag[idxC] += scale;
-                    aDiag[idxR] += scale;
-                    aPlusI[idxC] = -scale;
-                } else {
-                    // solid or air → treat as Dirichlet wall
-                    aDiag[idxC] += scale;
-                }
+    for (int j = 0; j < Ny; ++j) {
+        for (int i = 0; i < Nx; ++i) {
+            int c = idx(i, j);
+            if (!fluidState[c]) {
+                // solid/air cell: leave zeros
+                continue;
             }
 
-            // Y-direction neighbor (top)
-            if (j < Ny - 1) {
-                int idxT = idx(i, j + 1);
-                if (fluidState[idxT]) {
-                    aDiag[idxC] += scale;
-                    aDiag[idxT] += scale;
-                    aPlusJ[idxC] = -scale;
+            double diag = 0.0;
+
+            // +X neighbor (right)
+            if (i + 1 < Nx) {
+                int r = idx(i + 1, j);
+                if (fluidState[r]) {
+                    // fluid neighbor: contribute -scale off-diagonal and +scale to diagonal
+                    aPlusI[c] = -scale;   // will be used as A(c, r)
+                    diag += scale;
                 } else {
-                    // solid or air → treat as Dirichlet wall
-                    aDiag[idxC] += scale;
+                    // neighbor is solid/dirichlet: treat as fixed (adds to diag only)
+                    diag += scale;
                 }
+            } else {
+                // outside domain -> Dirichlet / boundary pressure = 0
+                diag += scale;
             }
+
+            // -X neighbor (left): handled via diag contribution only (no storage for left off-diagonal)
+            if (i - 1 >= 0) {
+                int l = idx(i - 1, j);
+                if (fluidState[l]) {
+                    // left neighbor is fluid -> this cell should also get +scale in diag
+                    diag += scale;
+                } else {
+                    diag += scale;
+                }
+            } else {
+                diag += scale;
+            }
+
+            // +Y neighbor (top)
+            if (j + 1 < Ny) {
+                int t = idx(i, j + 1);
+                if (fluidState[t]) {
+                    aPlusJ[c] = -scale; // A(c, t)
+                    diag += scale;
+                } else {
+                    diag += scale;
+                }
+            } else {
+                diag += scale;
+            }
+
+            // -Y neighbor (bottom): contribute to diag only
+            if (j - 1 >= 0) {
+                int b = idx(i, j - 1);
+                if (fluidState[b]) {
+                    diag += scale;
+                } else {
+                    diag += scale;
+                }
+            } else {
+                diag += scale;
+            }
+
+            // store diagonal
+            aDiag[c] = diag;
         }
     }
 }
+

@@ -72,7 +72,8 @@ int main(int argc, char* argv[]) {
         }
 
         FluidSim sim(Nx, Ny, dx);
-        sim.setGravity(-9.8);
+        // sim.setGravity(-9.8);
+        sim.setGravity(0);
         // setMultState(sim, rectangleOne);
         // setMultState(sim, rectangleTwo);
         // setMultState(sim, rectangleThree);
@@ -106,16 +107,16 @@ int main(int argc, char* argv[]) {
 
                     if (event.key.code == sf::Keyboard::Space){
                         paused = !paused;
-                    } 
+                    } else if (event.key.code == sf::Keyboard::R){
+                        sim.resetPressure();
+                    } else if (event.key.code == sf::Keyboard::Num0){
+                        sim = FluidSim(Nx, Ny, dx);
+                    }
 
                 }
                     
             }
 
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-                sim = FluidSim(Nx, Ny, dx);
-            } 
 
             sf::Vector2i localPosition = sf::Mouse::getPosition(window);
             int x_ = localPosition.x /scale;
