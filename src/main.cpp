@@ -80,7 +80,7 @@ int main(int argc, char* argv[]) {
         // setMultState(sim, diagLineTwo);
 
         int scale = 4; // pixel size per cell
-        sf::RenderWindow window(sf::VideoMode(Nx*scale, Ny*scale), "2D Fluid Simulation (Projection)");
+        sf::RenderWindow window(sf::VideoMode(Nx*scale, Ny*scale), "2D Air Flow Simulation");
         window.setFramerateLimit(60);
 
         sf::Image img;
@@ -91,6 +91,7 @@ int main(int argc, char* argv[]) {
         tex.create(Nx, Ny);
         spr.setScale((float)scale, (float)scale);
         bool continueSim = true;
+        bool paused = false;
 
         double cellIndex = 0;
         while (window.isOpen()) {
@@ -99,15 +100,22 @@ int main(int argc, char* argv[]) {
 
             sf::Event event;
             while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed)
+                if (event.type == sf::Event::Closed){
                     window.close();
+                } else if (event.type == sf::Event::KeyPressed){
+
+                    if (event.key.code == sf::Keyboard::Space){
+                        paused = !paused;
+                    } 
+
+                }
+                    
             }
 
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
                 sim = FluidSim(Nx, Ny, dx);
-            }
-
+            } 
 
             sf::Vector2i localPosition = sf::Mouse::getPosition(window);
             int x_ = localPosition.x /scale;
@@ -119,17 +127,14 @@ int main(int argc, char* argv[]) {
             } else if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
                 continueSim = false;
                 sim.cellState[sim.idxP(x_,y_)] = true;
-            } else {
+            } else if (event.type == sf::Event::MouseButtonReleased && !paused){
                 continueSim = true;
             }
 
 
-            if (continueSim){
+            if (!paused){
                 sim.step();
             }
-            
-
-
             
             for (int j = 0; j < Ny; ++j) {
                 for (int i = 0; i < Nx; ++i) {
@@ -138,11 +143,11 @@ int main(int argc, char* argv[]) {
 
                     color = getSpectrumColor(sim.clamp(s, 0.0, 1.0), sim.cellState[cellIndex]);
                     img.setPixel(i, Ny-1-j, sf::Color(color[0],color[1],color[2]));
-                    
-
-
                 }
             }
+
+            
+            
             tex.update(img);
             spr.setTexture(tex);
 

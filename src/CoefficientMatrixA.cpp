@@ -4,9 +4,9 @@
 MatrixA::MatrixA(){
     Nx_ = 1;
     Ny_ = 1;
-    aDiag = std::vector<double>(Nx_*Ny_, 0.0);
-    aPlusI = std::vector<double>(Nx_*Ny_, 0.0);
-    aPlusJ = std::vector<double>(Nx_*Ny_, 0.0);
+    aDiag = std::vector<double>((Nx_+1)*Ny_, 0.0);
+    aPlusI = std::vector<double>((Nx_+1)*Ny_, 0.0);
+    aPlusJ = std::vector<double>((Nx_+1)*Ny_, 0.0);
 }
 
 MatrixA::MatrixA(int Nx, int Ny, double dt, double rho, double dx, std::vector<bool> fluidState){
@@ -15,9 +15,9 @@ MatrixA::MatrixA(int Nx, int Ny, double dt, double rho, double dx, std::vector<b
     
     std::cout << "Making MatrixA" << std::endl;
 
-    aDiag = std::vector<double>(Nx*Ny, 0.0);
-    aPlusI = std::vector<double>(Nx*Ny, 0.0);
-    aPlusJ = std::vector<double>(Nx*Ny, 0.0);
+    aDiag = std::vector<double>((Nx+1)*Ny, 0.0);
+    aPlusI = std::vector<double>((Nx+1)*Ny, 0.0);
+    aPlusJ = std::vector<double>((Nx+1)*Ny, 0.0);
 
     std::cout << "Initialized A vectors" << std::endl;
 
@@ -30,8 +30,8 @@ MatrixA::MatrixA(int Nx, int Ny, double dt, double rho, double dx, std::vector<b
 
 
 void MatrixA::applyA(const std::vector<double>& givenPs, std::vector<double>& resultPs, const std::vector<bool>& fluidState){
-    for (int j = 0; j < Ny_; j++){
-        for (int i = 0; i < Nx_; i++){
+    for (int j = 0; j <= Ny_; j++){
+        for (int i = 0; i <= Nx_; i++){
             
             int index = idx(i, j);
 
@@ -83,8 +83,8 @@ void MatrixA::createAMatrices(int Nx, int Ny, double dt, double rho, double dx, 
     std::fill(aPlusI.begin(), aPlusI.end(), 0.0);
     std::fill(aPlusJ.begin(), aPlusJ.end(), 0.0);
 
-    for (int j = 0; j < Ny; ++j) {
-        for (int i = 0; i < Nx; ++i) {
+    for (int j = 0; j <= Ny; ++j) {
+        for (int i = 0; i <= Nx; ++i) {
             int idxC = idx(i, j);
             if (!fluidState[idxC]) continue;
 
