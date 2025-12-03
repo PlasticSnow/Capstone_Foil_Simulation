@@ -152,4 +152,3 @@ void MatrixA::createAMatrices(int Nx, int Ny, double dt, double rho, double dx, 
         }
     }
 }
-

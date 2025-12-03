@@ -453,21 +453,30 @@ void FluidSim::addForces() {
 
 void FluidSim::addInflow() {
     int i0 = 0;
-    int i1 = 1;
-    int j_min = Ny/8;
-    int j_max = Ny-Ny/8;
-    // int j_min = 0;
-    // int j_max = Ny;
+    // int i1 = 1;
+    // int j_min = Ny/8;
+    // int j_max = Ny-Ny/8;
+    int j_min = 0;
+    int j_max = Ny;
+    int i1 = Nx;
 
 
     for (int j = j_min; j < j_max; ++j) {
         for (int i = i0; i <= i1; ++i) {
             int pIdx = idxP(i, j);
-            dye[pIdx] = 1.0;
+            
 
             // Add horizontal inflow velocity to multiple u-cells
-            if (i < Nx - 1)
+            if (i < 2 && j > Ny/8 && j < Ny-Ny/8){
+                dye[pIdx] = 1.0;
                 u[idxU(i, j)] = inflowVelocity;
+            }
+
+            if (j == Ny-1 && i > Nx/8 && i < Nx-Nx/8){
+                dye[pIdx] = 1.0;
+                v[idxV(i, j)] = -inflowVelocity;
+            }
+            
         }
     }
 
